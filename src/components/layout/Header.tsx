@@ -1,84 +1,72 @@
 "use client";
 
 import Link from "next/link";
-import { navigation } from "@/data/content";
-import { products } from "@/data/products";
+import { navigation, collections, collectionText } from "@/data/content";
+import { productText, products } from "@/data/products";
 import { useStore } from "./StoreProvider";
 import { Icon } from "../ui/Icon";
 import { Logo } from "../ui/Logo";
 import { Modal } from "../ui/Modal";
 import { useMemo, useState } from "react";
 import { money } from "@/lib/format";
+import { Locale, localizedHref, ui } from "@/lib/i18n";
+import { usePathname } from "next/navigation";
 
-const menuColumns = [
-  { title: "FEATURED", links: ["Best Sellers", "New Arrivals", "Seasonal Blends", "Small Batch"] },
-  { title: "SHOP BY TYPE", links: ["Black", "Green", "Matcha", "Herbal", "Oolong", "White", "Chai", "Iced Tea"] },
-  { title: "SHOP BY FLAVOR", links: ["Fruit", "Floral", "Ginger", "Vanilla", "Mint", "Cinnamon", "Earl Grey"] },
-  { title: "SHOP BY BENEFIT", links: ["Sleep", "Energy", "Digestion", "Focus", "Relaxation", "Caffeine Free", "Organic"] },
-  { title: "SHOP BY FORMAT", links: ["Tea Bags", "Loose Leaf", "Tins", "Refills", "Samplers", "Iced Tea"] },
-];
-
-export function Header() {
+export function Header({ locale }: { locale: Locale }) {
   const { count, setCartOpen, searchOpen, setSearchOpen, mobileOpen, setMobileOpen } = useStore();
   const [shopOpen, setShopOpen] = useState(false);
+  const pathname = usePathname();
+  const otherLocale: Locale = locale === "en" ? "ru" : "en";
+  const switchHref = pathname.replace(/^\/(en|ru)(?=\/|$)/, `/${otherLocale}`) || `/${otherLocale}`;
   return <>
-    <div className="announcement"><span>Complimentary shipping on orders $65+</span><span>Summer steeping: save 15% on iced tea</span></div>
+    <div className="announcement"><span>{locale === "ru" ? "Доставка Fedorov Tea по всему миру" : "Fedorov Tea delivers worldwide"}</span><span>{locale === "ru" ? "Собран вручную · Республика Марий Эл" : "Hand collected · Mari El Republic"}</span></div>
     <header className="site-header">
-      <div className="utility container"><span>Small-batch tea, packed by hand</span><nav><Link href="/shop">Subscriptions</Link><Link href="/account">Rewards</Link><Link href="/about">Our Story</Link></nav></div>
+      <div className="utility container"><span>{locale === "ru" ? "Только иван-чай и натуральные добавки" : "Only Ivan Tea and natural additions"}</span><nav><Link href={localizedHref(locale, "/wholesale")}>{ui[locale].partners}</Link><Link href={localizedHref(locale, "/about")}>{ui[locale].story}</Link><a className="language-switch" href={switchHref} hrefLang={otherLocale}><span className={locale === "en" ? "is-active" : ""}>EN</span><i>/</i><span className={locale === "ru" ? "is-active" : ""}>RU</span></a></nav></div>
       <div className="header-main container">
-        <button className="mobile-trigger icon-button" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Icon name="menu" /></button>
-        <Logo />
-        <nav className="primary-nav" aria-label="Main navigation">
+        <button className="mobile-trigger icon-button" onClick={() => setMobileOpen(true)} aria-label={locale === "ru" ? "Открыть меню" : "Open navigation"}><Icon name="menu" /></button>
+        <Logo locale={locale}/>
+        <nav className="primary-nav" aria-label={locale === "ru" ? "Главная навигация" : "Main navigation"}>
           {navigation.map((item, index) => index === 0 ?
-            <div className="nav-group" key={item.label} onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}>
-              <Link href={item.href} aria-expanded={shopOpen} onFocus={() => setShopOpen(true)}>{item.label}<Icon name="chevron" size={14}/></Link>
-              {shopOpen && <MegaMenu onClose={() => setShopOpen(false)} />}
-            </div> : <Link key={item.label} href={item.href}>{item.label}</Link>)}
+            <div className="nav-group" key={item.href} onMouseEnter={() => setShopOpen(true)} onMouseLeave={() => setShopOpen(false)}>
+              <Link href={localizedHref(locale, item.href)} aria-expanded={shopOpen} onFocus={() => setShopOpen(true)}>{locale === "ru" ? item.labelRu : item.label}<Icon name="chevron" size={14}/></Link>
+              {shopOpen && <MegaMenu locale={locale} onClose={() => setShopOpen(false)} />}
+            </div> : <Link key={item.href} href={localizedHref(locale, item.href)}>{locale === "ru" ? item.labelRu : item.label}</Link>)}
         </nav>
         <div className="header-actions">
-          <button className="icon-button" onClick={() => setSearchOpen(true)} aria-label="Search"><Icon name="search" /></button>
-          <Link className="icon-button account-icon" href="/account" aria-label="Account"><Icon name="user" /></Link>
-          <button className="icon-button cart-icon" onClick={() => setCartOpen(true)} aria-label={`Cart with ${count} items`}><Icon name="bag" /><span>{count}</span></button>
+          <a className="mobile-language" href={switchHref} hrefLang={otherLocale}>{otherLocale.toUpperCase()}</a>
+          <button className="icon-button" onClick={() => setSearchOpen(true)} aria-label={ui[locale].search}><Icon name="search" /></button>
+          <Link className="icon-button account-icon" href={localizedHref(locale, "/account")} aria-label={ui[locale].account}><Icon name="user" /></Link>
+          <button className="icon-button cart-icon" onClick={() => setCartOpen(true)} aria-label={`${ui[locale].cart}: ${count}`}><Icon name="bag" /><span>{count}</span></button>
         </div>
       </div>
     </header>
-    <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
-    <MobileNavigation open={mobileOpen} onClose={() => setMobileOpen(false)} />
+    <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} locale={locale}/>
+    <MobileNavigation open={mobileOpen} onClose={() => setMobileOpen(false)} locale={locale} switchHref={switchHref}/>
   </>;
 }
 
-function MegaMenu({ onClose }: { onClose: () => void }) {
+function MegaMenu({ onClose, locale }: { onClose: () => void; locale: Locale }) {
   return <div className="mega-menu" onMouseLeave={onClose}>
-    <div className="mega-inner container">
-      {menuColumns.map((column) => <div className="mega-column" key={column.title}><p>{column.title}</p>{column.links.map((link, i) => <Link className={i < 2 && column.title === "FEATURED" ? "featured-link" : ""} href={`/shop?${column.title.toLowerCase().replaceAll(" ", "-")}=${link.toLowerCase().replaceAll(" ", "-")}`} key={link}>{link}</Link>)}</div>)}
-      <Link className="mega-feature" href="/gifts"><span>THE HOST&apos;S EDIT</span><strong>Tea worth gathering around</strong><u>Explore Gifts</u></Link>
+    <div className="mega-inner container mega-inner--fedorov">
+      <div className="mega-column"><p>{locale === "ru" ? "ПО ВКУСУ" : "BY STYLE"}</p>{collections.map((item) => { const copy = collectionText(item, locale); return <Link href={localizedHref(locale, `/collections/${item.slug}`)} key={item.slug}>{copy.name}</Link>; })}</div>
+      <div className="mega-column"><p>{locale === "ru" ? "ВЫБРАТЬ" : "SHOP"}</p><Link className="featured-link" href={localizedHref(locale, "/shop")}>{locale === "ru" ? "Все вкусы" : "All Ivan Tea"}</Link><Link className="featured-link" href={localizedHref(locale, "/gifts")}>{locale === "ru" ? "Подарки из Марий Эл" : "Gifts from Mari El"}</Link><Link href={localizedHref(locale, "/shop?format=loose%20leaf")}>{locale === "ru" ? "Розничная упаковка" : "Retail canisters"}</Link><Link href={localizedHref(locale, "/wholesale")}>{locale === "ru" ? "Чай на развес" : "Bulk without retail packaging"}</Link></div>
+      <div className="mega-column"><p>{locale === "ru" ? "УЗНАТЬ" : "LEARN"}</p><Link href={localizedHref(locale, "/blog/what-is-ivan-tea")}>{locale === "ru" ? "Что такое иван-чай" : "What is Ivan Tea?"}</Link><Link href={localizedHref(locale, "/blog/brewing-ivan-tea")}>{locale === "ru" ? "Как заваривать" : "How to brew"}</Link><Link href={localizedHref(locale, "/blog/composition-and-research")}>{locale === "ru" ? "Состав и исследования" : "Composition & research"}</Link><Link href={localizedHref(locale, "/blog/cold-ivan-tea-apple-berries")}>{locale === "ru" ? "Холодный иван-чай" : "Cold Ivan Tea"}</Link></div>
+      <Link className="mega-feature mega-feature--mari" href={localizedHref(locale, "/about")}><span>{locale === "ru" ? "ИЗ МАРИЙ ЭЛ" : "FROM MARI EL"}</span><strong>{locale === "ru" ? "Каждый лист собран вручную" : "Every leaf begins by hand"}</strong><u>{locale === "ru" ? "Наша история" : "Our story"}</u></Link>
     </div>
   </div>;
 }
 
-function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+function SearchModal({ open, onClose, locale }: { open: boolean; onClose: () => void; locale: Locale }) {
   const [query, setQuery] = useState("");
-  const matches = useMemo(() => products.filter((p) => `${p.name} ${p.type} ${p.flavor}`.toLowerCase().includes(query.toLowerCase())).slice(0, 4), [query]);
-  return <Modal open={open} onClose={onClose} title="Search Alder & Hearth">
-    <div className="search-box"><Icon name="search"/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search tea, ingredients and guides" aria-label="Search" autoComplete="off"/></div>
-    {!query && <div className="popular-searches"><span>POPULAR</span>{["caffeine free", "ginger", "gifts", "how to brew"].map((term) => <button key={term} onClick={() => setQuery(term)}>{term}</button>)}</div>}
-    <div className="search-results">
-      <p>{query ? `PRODUCTS · ${matches.length}` : "DISCOVER"}</p>
-      {matches.map((product) => <Link href={`/products/${product.slug}`} className="search-result" key={product.slug} onClick={onClose}><span className="mini-tin" style={{ "--tin": product.color, "--accent": product.accent } as React.CSSProperties}>{product.initials}</span><span><b>{product.name}</b><small>{product.type} · {money(product.price)}</small></span><Icon name="arrow" /></Link>)}
-      {query && <><p>COLLECTIONS &amp; ARTICLES</p><Link href="/collections/black-tea" className="text-result" onClick={onClose}>Black Tea Collection <Icon name="arrow"/></Link><Link href="/blog/a-practical-guide-to-brewing" className="text-result" onClick={onClose}>A Better Cup, by Degrees <Icon name="arrow"/></Link></>}
-    </div>
+  const matches = useMemo(() => products.filter((product) => { const copy = productText(product, locale); return `${copy.name} ${copy.type} ${copy.flavor} ${copy.ingredients}`.toLowerCase().includes(query.toLowerCase()); }).slice(0, 5), [query, locale]);
+  return <Modal open={open} onClose={onClose} title={locale === "ru" ? "Поиск Fedorov Tea" : "Search Fedorov Tea"}>
+    <div className="search-box"><Icon name="search"/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={locale === "ru" ? "Вкус, добавка или статья" : "Search flavor, addition or guide"} aria-label={ui[locale].search} autoComplete="off"/></div>
+    {!query && <div className="popular-searches"><span>{locale === "ru" ? "ПОПУЛЯРНОЕ" : "POPULAR"}</span>{(locale === "ru" ? ["классический", "ягоды", "подарки", "как заваривать"] : ["pure", "berries", "gifts", "how to brew"]).map((term) => <button key={term} onClick={() => setQuery(term)}>{term}</button>)}</div>}
+    <div className="search-results"><p>{query ? `${locale === "ru" ? "ТОВАРЫ" : "PRODUCTS"} · ${matches.length}` : (locale === "ru" ? "ПОПРОБУЙТЕ" : "DISCOVER")}</p>{matches.map((product) => { const copy = productText(product, locale); return <Link href={localizedHref(locale, `/products/${product.slug}`)} className="search-result" key={product.slug} onClick={onClose}><span className="mini-tin" style={{ "--tin": product.color, "--accent": product.accent } as React.CSSProperties}>{product.initials}</span><span><b>{copy.name}</b><small>{copy.type} · {money(product.price, locale)}</small></span><Icon name="arrow" /></Link>; })}{query && <><p>{locale === "ru" ? "СТАТЬИ" : "ARTICLES"}</p><Link href={localizedHref(locale, "/blog/what-is-ivan-tea")} className="text-result" onClick={onClose}>{locale === "ru" ? "Что такое иван-чай" : "What is Ivan Tea?"} <Icon name="arrow"/></Link></>}</div>
   </Modal>;
 }
 
-function MobileNavigation({ open, onClose }: { open: boolean; onClose: () => void }) {
+function MobileNavigation({ open, onClose, locale, switchHref }: { open: boolean; onClose: () => void; locale: Locale; switchHref: string }) {
   const [expanded, setExpanded] = useState<string | null>("SHOP");
-  return <Modal open={open} onClose={onClose} title="Menu" side="left">
-    <nav className="mobile-nav">
-      {navigation.map((item) => <div key={item.label}>
-        <div className="mobile-nav-row"><Link href={item.href} onClick={onClose}>{item.label}</Link>{item.label === "SHOP" && <button onClick={() => setExpanded(expanded ? null : "SHOP")} aria-expanded={expanded === "SHOP"}><Icon name="chevron" /></button>}</div>
-        {item.label === "SHOP" && expanded === "SHOP" && <div className="mobile-submenu">{menuColumns.slice(0, 4).map((column) => <div key={column.title}><span>{column.title}</span>{column.links.slice(0, 5).map((link) => <Link onClick={onClose} href={`/shop?q=${link}`} key={link}>{link}</Link>)}</div>)}</div>}
-      </div>)}
-      <div className="mobile-utilities"><Link href="/account">Account</Link><Link href="/shop">Subscriptions</Link><Link href="/account">Rewards</Link></div>
-    </nav>
-  </Modal>;
+  return <Modal open={open} onClose={onClose} title={locale === "ru" ? "Меню" : "Menu"} side="left"><nav className="mobile-nav">{navigation.map((item, index) => <div key={item.href}><div className="mobile-nav-row"><Link href={localizedHref(locale, item.href)} onClick={onClose}>{locale === "ru" ? item.labelRu : item.label}</Link>{index === 0 && <button onClick={() => setExpanded(expanded ? null : "SHOP")} aria-expanded={expanded === "SHOP"}><Icon name="chevron" /></button>}</div>{index === 0 && expanded === "SHOP" && <div className="mobile-submenu"><div><span>{locale === "ru" ? "КОЛЛЕКЦИИ" : "COLLECTIONS"}</span>{collections.map((item) => { const copy = collectionText(item, locale); return <Link onClick={onClose} href={localizedHref(locale, `/collections/${item.slug}`)} key={item.slug}>{copy.name}</Link>; })}</div></div>}</div>)}<div className="mobile-utilities"><a href={switchHref}>{locale === "ru" ? "English version" : "Русская версия"}</a><Link href={localizedHref(locale, "/account")}>{ui[locale].account}</Link><Link href={localizedHref(locale, "/legal")}>{locale === "ru" ? "Доставка и документы" : "Delivery & legal"}</Link></div></nav></Modal>;
 }

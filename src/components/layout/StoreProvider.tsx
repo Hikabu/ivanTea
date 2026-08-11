@@ -27,10 +27,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("alder-cart");
+    const saved = localStorage.getItem("fedorov-cart");
     if (saved) try { setCart(JSON.parse(saved)); } catch { /* ignore malformed local data */ }
   }, []);
-  useEffect(() => { localStorage.setItem("alder-cart", JSON.stringify(cart)); }, [cart]);
+  useEffect(() => { localStorage.setItem("fedorov-cart", JSON.stringify(cart)); }, [cart]);
 
   const addToCart = (product: Product, variantId = product.variants[0].id, quantity = 1) => {
     setCart((current) => {

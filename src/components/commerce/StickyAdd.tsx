@@ -1,10 +1,12 @@
 "use client";
 
-import { Product } from "@/data/products";
+import { Product, productText } from "@/data/products";
 import { money } from "@/lib/format";
+import { Locale, ui } from "@/lib/i18n";
 import { useStore } from "../layout/StoreProvider";
 
-export function StickyAdd({ product }: { product: Product }) {
+export function StickyAdd({ product, locale = "en" }: { product: Product; locale?: Locale }) {
   const { addToCart } = useStore();
-  return <div className="sticky-mobile-add"><span><b>{product.name}</b><small>{money(product.price)}</small></span><button onClick={() => addToCart(product)}>ADD TO CART</button></div>;
+  const copy = productText(product, locale);
+  return <div className="sticky-mobile-add"><span><b>{copy.name}</b><small>{money(product.price, locale)}</small></span><button onClick={() => addToCart(product)}>{ui[locale].addToCart.toUpperCase()}</button></div>;
 }
