@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import "../garof.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StoreProvider } from "@/components/layout/StoreProvider";
@@ -11,12 +12,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const locale = await resolveLocale(params);
   return locale === "ru"
     ? {
-        title: { default: "Fedorov Tea | Иван-чай ручного сбора из Марий Эл", template: "%s | Fedorov Tea" },
-        description: "Современный премиальный иван-чай ручного сбора из Республики Марий Эл: классический, с натуральными добавками, подарки, розница и опт с доставкой по миру.",
+        title: { default: "GAROF | Чай из сердца Марий Эл", template: "%s | GAROF" },
+        description: "Премиальный чай GAROF, вдохновлённый природой, ботаническими традициями и культурным наследием Марий Эл.",
       }
     : {
-        title: { default: "Fedorov Tea | Hand-Collected Ivan Tea from Mari El", template: "%s | Fedorov Tea" },
-        description: "Modern premium Ivan Tea, hand collected in the Mari El Republic. Pure fireweed tea, natural fruit and herb additions, gifts, worldwide retail and wholesale.",
+        title: { default: "GAROF | Tea From The Heart Of Mari El", template: "%s | GAROF" },
+        description: "GAROF is a premium tea brand inspired by the nature, botanical traditions and cultural heritage of Mari El."
       };
 }
 

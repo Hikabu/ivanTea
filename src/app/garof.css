@@ -1,0 +1,100 @@
+/* GAROF editorial homepage layer */
+.site-header { position: absolute; z-index: 50; top: 28px; right: 32px; left: 32px; border: 0; border-radius: 5px; background: rgba(255, 254, 250, .95); box-shadow: 0 12px 24px rgba(35, 42, 40, .08); backdrop-filter: blur(12px); }
+.site-header .utility { display: none; }
+.header-main { width: 100%; height: 98px; grid-template-columns: 1fr auto 1fr; padding: 0 34px; }
+.logo { grid-column: 2; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
+.logo-mark { width: 24px; height: 18px; }
+.logo-mark i { width: 11px; height: 18px; border-width: 1px; border-color: var(--forest); }
+.logo-mark i:nth-child(1) { left: 0; bottom: 0; transform: rotate(-42deg); }
+.logo-mark i:nth-child(2) { left: 7px; bottom: 2px; transform: rotate(-4deg); }
+.logo-mark i:nth-child(3) { left: 14px; bottom: 0; transform: rotate(42deg); }
+.logo b { font-size: 28px; letter-spacing: .22em; }
+.logo small { margin-top: 3px; font-size: 7px; letter-spacing: .34em; }
+.primary-nav { grid-column: 1; grid-row: 1; justify-content: flex-start; gap: 37px; }
+.primary-nav > a, .nav-group > a { height: 98px; border: 0; font-size: 11px; letter-spacing: .08em; }
+.header-actions { grid-column: 3; grid-row: 1; align-items: center; gap: 5px; }
+.header-actions::before { width: 220px; height: 42px; margin-right: 14px; padding-left: 13px; border: 2px solid #56606a; content: "Search our teas, stories..."; display: flex; align-items: center; color: #71767b; font: 17px var(--serif); }
+.header-actions .icon-button:first-of-type { margin-left: -64px; }
+.garof-hero { height: min(760px, 100vh); min-height: 660px; }
+.garof-hero img { object-position: center 42%; }
+.garof-hero .hero-overlay { background: linear-gradient(90deg, rgba(27, 35, 30, .66), rgba(27, 35, 30, .18) 58%, transparent); }
+.garof-hero .hero-copy { justify-content: center; padding-top: 140px; }
+.garof-hero .hero-copy h1 { max-width: 680px; margin-bottom: 26px; font-size: clamp(58px, 7.1vw, 108px); line-height: .9; letter-spacing: -.055em; animation: garof-rise 850ms ease both; }
+.garof-hero .hero-copy > span { max-width: 410px; font-size: 15px; line-height: 1.7; }
+.garof-hero .hero-copy > div { gap: 26px; margin-top: 37px; }
+.garof-hero .button { min-height: 54px; border-radius: 4px; padding-inline: 27px; }
+.garof-hero .button--primary { color: var(--text); background: #fbfaf4; border-color: #fbfaf4; }
+.garof-hero .button--primary:hover { color: #fff; background: var(--forest); border-color: var(--forest); }
+.garof-hero .button--text { border: 1px solid rgba(255,255,255,.75); padding-inline: 23px; }
+.brand-statement { max-width: 1000px; padding-block: 112px 120px; text-align: center; }
+.brand-statement::before { display: block; margin-bottom: 20px; content: "WELCOME TO GAROF"; font-size: 10px; font-weight: 700; letter-spacing: .2em; }
+.brand-statement p { max-width: 920px; margin: 0 auto 22px; font-size: clamp(43px, 5vw, 74px); line-height: .98; letter-spacing: -.055em; }
+.brand-statement span { display: block; max-width: 580px; margin: 0 auto; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.brand-statement span::after { display: block; width: max-content; margin: 26px auto 0; border-bottom: 1px solid; content: "DISCOVER OUR STORY"; color: var(--text); font-size: 10px; font-weight: 700; letter-spacing: .11em; }
+.product-discovery { padding-top: 25px; }
+.product-discovery .section-head { align-items: center; margin-bottom: 38px; }
+.product-discovery .section-head h2 { margin: 0; font-size: clamp(42px, 4.4vw, 60px); font-weight: 400; letter-spacing: -.055em; }
+.garof-tabs { align-items: center; gap: clamp(16px, 2.6vw, 37px); }
+.garof-tabs button { min-height: 40px; border: 0; color: var(--muted); font-size: 14px; font-weight: 500; letter-spacing: 0; }
+.garof-tabs button[aria-selected="true"] { padding-inline: 24px; border: 1px solid var(--terracotta); border-radius: 50%; color: var(--text); }
+.product-grid { gap: 38px 26px; }
+.product-card-image { aspect-ratio: .88; border-radius: 3px; background: #eeeae2; }
+.product-card-copy h3 { font-size: 25px; letter-spacing: -.02em; }
+.product-visual { isolation: isolate; background: #ebe8df; }
+.product-visual-photo, .product-visual-tint { position: absolute; z-index: -2; inset: 0; transition: opacity 420ms ease, transform 650ms ease; }
+.product-visual-photo--primary { opacity: 1; }
+.product-visual-photo--prepared { opacity: 0; transform: scale(1.04); }
+.product-visual-tint { z-index: -1; background: rgba(247, 243, 233, .48); }
+.product-card:hover .product-visual-photo--primary, .product-card:focus-within .product-visual-photo--primary { opacity: 0; }
+.product-card:hover .product-visual-photo--prepared, .product-card:focus-within .product-visual-photo--prepared { opacity: 1; transform: scale(1); }
+.product-card:hover .tea-tin, .product-card:focus-within .tea-tin { opacity: .16; }
+.tea-tin { transition: transform 420ms ease, opacity 420ms ease; }
+.category-section { margin-top: 35px; }
+.campaign-section { min-height: 620px; }
+@keyframes garof-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 900px) {
+  .site-header { top: 16px; right: 16px; left: 16px; }
+  .header-main { height: 76px; padding: 0 15px; }
+  .primary-nav { gap: 16px; }
+  .primary-nav > a, .nav-group > a { height: 76px; font-size: 9px; }
+  .header-actions::before { display: none; }
+  .header-actions .icon-button:first-of-type { margin-left: 0; }
+  .garof-hero { min-height: 650px; }
+  .garof-hero .hero-copy { padding-top: 110px; }
+  .garof-hero .hero-copy h1 { font-size: clamp(56px, 10vw, 82px); }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-discovery .section-head { align-items: flex-start; flex-direction: column; }
+  .garof-tabs { width: 100%; overflow-x: auto; padding-bottom: 6px; }
+}
+@media (max-width: 680px) {
+  :root { --container: calc(100vw - 32px); }
+  .site-header { position: absolute; }
+  .header-main { grid-template-columns: 42px 1fr 42px; }
+  .mobile-trigger { display: inline-grid; grid-column: 1; grid-row: 1; }
+  .primary-nav { display: none; }
+  .logo { grid-column: 2; }
+  .header-actions { grid-column: 3; }
+  .header-actions::before { display: none; }
+  .header-actions .icon-button:not(.cart-icon), .header-actions .mobile-language { display: none; }
+  .logo b { font-size: 24px; }
+  .garof-hero { height: 760px; min-height: 0; }
+  .garof-hero img { object-position: 58% center; }
+  .garof-hero .hero-overlay { background: linear-gradient(0deg, rgba(28, 48, 39, .78) 5%, rgba(28, 48, 39, .08) 70%); }
+  .garof-hero .hero-copy { justify-content: flex-end; padding-bottom: 56px; }
+  .garof-hero .hero-copy h1 { font-size: clamp(53px, 15vw, 76px); }
+  .garof-hero .hero-copy > div { align-items: stretch; flex-direction: column; gap: 11px; width: min(100%, 320px); }
+  .garof-hero .button { width: 100%; }
+  .brand-statement { padding-block: 82px 90px; }
+  .brand-statement p { font-size: 47px; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
+  .product-card-copy h3 { font-size: 20px; }
+  .product-card-copy p, .rating, .product-card-copy > strong { display: none; }
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  .category-tile b { font-size: 23px; }
+  .campaign-section { grid-template-columns: 1fr; }
+  .campaign-image { min-height: 390px; }
+  .campaign-copy { padding: 55px 24px 65px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

@@ -164,7 +164,8 @@ export const articles: Article[] = [
 
 export const navigation = [
   { label: "SHOP", labelRu: "ИВАН-ЧАЙ", href: "/shop" },
-  { label: "MARI EL", labelRu: "МАРИЙ ЭЛ", href: "/about" },
+  { label: "DISCOVER", labelRu: "ОТКРЫТЬ", href: "/about" },
+  { label: "TEA QUIZ", labelRu: "TEA QUIZ", href: "/shop" },
   { label: "GIFTS", labelRu: "ПОДАРКИ", href: "/gifts" },
   { label: "JOURNAL", labelRu: "СТАТЬИ", href: "/blog" },
   { label: "WHOLESALE", labelRu: "ОПТОМ", href: "/wholesale" },

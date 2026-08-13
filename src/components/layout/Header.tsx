@@ -19,7 +19,7 @@ export function Header({ locale }: { locale: Locale }) {
   const otherLocale: Locale = locale === "en" ? "ru" : "en";
   const switchHref = pathname.replace(/^\/(en|ru)(?=\/|$)/, `/${otherLocale}`) || `/${otherLocale}`;
   return <>
-    <div className="announcement"><span>{locale === "ru" ? "Доставка Fedorov Tea по всему миру" : "Fedorov Tea delivers worldwide"}</span><span>{locale === "ru" ? "Собран вручную · Республика Марий Эл" : "Hand collected · Mari El Republic"}</span></div>
+    <div className="announcement"><span>{locale === "ru" ? "Доставка GAROF по всему миру" : "GAROF delivers worldwide"}</span><span>{locale === "ru" ? "Собран вручную · Республика Марий Эл" : "Hand collected · Mari El Republic"}</span></div>
     <header className="site-header">
       <div className="utility container"><span>{locale === "ru" ? "Только иван-чай и натуральные добавки" : "Only Ivan Tea and natural additions"}</span><nav><Link href={localizedHref(locale, "/wholesale")}>{ui[locale].partners}</Link><Link href={localizedHref(locale, "/about")}>{ui[locale].story}</Link><a className="language-switch" href={switchHref} hrefLang={otherLocale}><span className={locale === "en" ? "is-active" : ""}>EN</span><i>/</i><span className={locale === "ru" ? "is-active" : ""}>RU</span></a></nav></div>
       <div className="header-main container">
@@ -59,7 +59,7 @@ function MegaMenu({ onClose, locale }: { onClose: () => void; locale: Locale }) 
 function SearchModal({ open, onClose, locale }: { open: boolean; onClose: () => void; locale: Locale }) {
   const [query, setQuery] = useState("");
   const matches = useMemo(() => products.filter((product) => { const copy = productText(product, locale); return `${copy.name} ${copy.type} ${copy.flavor} ${copy.ingredients}`.toLowerCase().includes(query.toLowerCase()); }).slice(0, 5), [query, locale]);
-  return <Modal open={open} onClose={onClose} title={locale === "ru" ? "Поиск Fedorov Tea" : "Search Fedorov Tea"}>
+  return <Modal open={open} onClose={onClose} title={locale === "ru" ? "Поиск GAROF" : "Search GAROF"}>
     <div className="search-box"><Icon name="search"/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={locale === "ru" ? "Вкус, добавка или статья" : "Search flavor, addition or guide"} aria-label={ui[locale].search} autoComplete="off"/></div>
     {!query && <div className="popular-searches"><span>{locale === "ru" ? "ПОПУЛЯРНОЕ" : "POPULAR"}</span>{(locale === "ru" ? ["классический", "ягоды", "подарки", "как заваривать"] : ["pure", "berries", "gifts", "how to brew"]).map((term) => <button key={term} onClick={() => setQuery(term)}>{term}</button>)}</div>}
     <div className="search-results"><p>{query ? `${locale === "ru" ? "ТОВАРЫ" : "PRODUCTS"} · ${matches.length}` : (locale === "ru" ? "ПОПРОБУЙТЕ" : "DISCOVER")}</p>{matches.map((product) => { const copy = productText(product, locale); return <Link href={localizedHref(locale, `/products/${product.slug}`)} className="search-result" key={product.slug} onClick={onClose}><span className="mini-tin" style={{ "--tin": product.color, "--accent": product.accent } as React.CSSProperties}>{product.initials}</span><span><b>{copy.name}</b><small>{copy.type} · {money(product.price, locale)}</small></span><Icon name="arrow" /></Link>; })}{query && <><p>{locale === "ru" ? "СТАТЬИ" : "ARTICLES"}</p><Link href={localizedHref(locale, "/blog/what-is-ivan-tea")} className="text-result" onClick={onClose}>{locale === "ru" ? "Что такое иван-чай" : "What is Ivan Tea?"} <Icon name="arrow"/></Link></>}</div>
