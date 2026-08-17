@@ -162,21 +162,6 @@ export const articles: Article[] = [
   },
 ];
 
-export const navigation = [
-  { label: "SHOP", labelRu: "ИВАН-ЧАЙ", href: "/shop" },
-  { label: "DISCOVER", labelRu: "ОТКРЫТЬ", href: "/about" },
-  { label: "TEA QUIZ", labelRu: "TEA QUIZ", href: "/shop" },
-  { label: "GIFTS", labelRu: "ПОДАРКИ", href: "/gifts" },
-  { label: "JOURNAL", labelRu: "СТАТЬИ", href: "/blog" },
-  { label: "WHOLESALE", labelRu: "ОПТОМ", href: "/wholesale" },
-];
-
-export const testimonials = [
-  { quote: "It tastes grounded and bright at once—and the Mari El story makes the gift feel genuinely specific.", quoteRu: "Вкус одновременно глубокий и яркий, а история Марий Эл делает подарок по-настоящему особенным.", name: "Anna K.", product: "Pure Ivan Tea", productRu: "Классический иван-чай" },
-  { quote: "The apple and lingonberry blend is aromatic without covering the fireweed. Beautiful packaging, too.", quoteRu: "Яблоко и брусника звучат ярко, но не перекрывают кипрей. И упаковка очень красивая.", name: "Mikhail S.", product: "Apple & Lingonberry", productRu: "Яблоко и брусника" },
-  { quote: "We ordered the Mari El gift sets for international partners; they felt modern, local and memorable.", quoteRu: "Мы заказали наборы из Марий Эл для зарубежных партнёров — современно, локально и запоминается.", name: "Elena P.", product: "Mari El Gift Set", productRu: "Подарочный набор Марий Эл" },
-];
-
 export const collectionText = (collection: Collection, locale: Locale) => ({
   ...collection,
   name: locale === "ru" ? collection.nameRu : collection.name,

@@ -25,7 +25,7 @@ const filterGroups: { key: "flavor" | "benefit" | "format" | "certification"; en
   ] },
 ];
 
-export function CollectionBrowser({ initialFlavor, locale = "en" }: { initialFlavor?: string; initialType?: string; locale?: Locale }) {
+export function CollectionBrowser({ initialFlavor, locale = "en" }: { initialFlavor?: string; locale?: Locale }) {
   const params = useSearchParams(); const pathname = usePathname(); const router = useRouter();
   const [sort, setSort] = useState(params.get("sort") ?? "featured");
   const [filtersOpen, setFiltersOpen] = useState(false);
