@@ -27,6 +27,11 @@
     transform: none;
   }
 
+  .tea-scene--1 .tea-scene__object img,
+  .tea-scene--2 .tea-scene__object img {
+    transform: scale(0.75);
+  }
+
   .tea-ground {
     height: 118px;
   }
