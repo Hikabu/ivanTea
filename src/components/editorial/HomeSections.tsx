@@ -1,54 +1,171 @@
 import Image from "next/image";
 import Link from "next/link";
 import { products, productText } from "@/data/products";
-import { Locale, localizedHref } from "@/lib/i18n";
 import { money } from "@/lib/format";
-import { ProductVisual } from "@/components/commerce/ProductVisual";
+import { Locale, localizedHref } from "@/lib/i18n";
 
-export function Hero({ locale }: { locale: Locale }) {
-  return <section className="quiet-hero">
-    <Image src="/images/fedorov/hero-field.png" alt={locale === "ru" ? "Ручной сбор кипрея в поле Марий Эл" : "Fireweed gathered by hand in a Mari El field"} fill priority sizes="100vw" />
-    <div className="quiet-hero__veil" />
-    <div className="quiet-hero__copy">
-      <p>{locale === "ru" ? "ИВАН-ЧАЙ · МАРИЙ ЭЛ" : "IVAN-TEA · MARI EL"}</p>
-      <h1>{locale === "ru" ? "Там, где заканчивается дорога." : "Where the road ends."}</h1>
-      <Link href="#teas">{locale === "ru" ? "Открыть чаи" : "Discover the teas"} <span>↓</span></Link>
-    </div>
-    <small>{locale === "ru" ? "56.6° с.ш. · 47.9° в.д." : "56.6° N · 47.9° E"}</small>
-  </section>;
-}
-
-const chapters = {
-  en: [
-    { n: "01", title: "The Field", text: "Far from highways and cities, fireweed grows where meadow gives way to forest.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
-    { n: "02", title: "The Harvest", text: "Healthy leaves are gathered by hand, one small batch and one familiar field at a time.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
-  ],
-  ru: [
-    { n: "01", title: "Поле", text: "Вдали от трасс и городов кипрей растёт там, где луг встречается с лесом.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
-    { n: "02", title: "Сбор", text: "Здоровые листья собирают вручную — маленькими партиями, на знакомых полях.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
-  ],
+const copy = {
+  en: {
+    heroKicker: "FEDOROV TEA · MARI EL · WILD HARVEST",
+    heroTitle: <>A quiet field,<br/><em>held in a cup.</em></>,
+    heroBody: "Hand-gathered fireweed tea, made in limited seasonal batches.",
+    heroCta: "Meet the tea",
+    heroCaption: "Fireweed in flower · Republic of Mari El",
+    scroll: "Scroll to discover",
+    statementKicker: "TEA, WITH A SENSE OF PLACE",
+    statement: <>Not made to fill a shelf.<br/>Made to <em>stay with you.</em></>,
+    statementBody: "From the first purple flower to the last amber pour, every part of Fedorov Tea belongs to one landscape and one unhurried ritual.",
+    limited: "Limited seasonal release",
+    signatureKicker: "THE SIGNATURE EDITION · 01",
+    signatureTitle: "Ivan Tea",
+    signatureBody: "Pure fermented fireweed leaf. Soft, rounded and quietly floral, with the warmth of dried fruit and meadow honey.",
+    signatureFacts: ["50 g · loose leaf", "Naturally caffeine-free", "Gathered by hand"],
+    signatureCta: "Discover the signature tea",
+    interludeKicker: "THE RITUAL",
+    interludeTitle: <>For the hour when<br/>the world goes <em>quiet.</em></>,
+    collectionKicker: "THE COLLECTION · FOUR SMALL BATCHES",
+    collectionTitle: "One field. Four expressions.",
+    collectionBody: "The pure leaf comes first. Meadow herbs, evening flowers and forest berries follow—each blend restrained enough to let the fireweed remain itself.",
+    view: "View tea",
+    originKicker: "LEAF STUDY · CHAMAENERION ANGUSTIFOLIUM",
+    originTitle: <>Wild by nature.<br/><em>Precise by hand.</em></>,
+    originBody: "Picked far from roads, rolled, fermented and dried in small runs. No caffeine. No perfume. Nothing added to make the story louder than the leaf.",
+    originCta: "See how it is made",
+    closingKicker: "FROM MARI EL, WITH TIME",
+    closingTitle: "A limited harvest for a daily ritual.",
+    closingCta: "Shop the collection",
+  },
+  ru: {
+    heroKicker: "FEDOROV TEA · МАРИЙ ЭЛ · ДИКИЙ СБОР",
+    heroTitle: <>Тихое поле,<br/><em>сохранённое в чашке.</em></>,
+    heroBody: "Иван-чай ручного сбора, созданный небольшими сезонными партиями.",
+    heroCta: "Познакомиться с чаем",
+    heroCaption: "Кипрей в цвету · Республика Марий Эл",
+    scroll: "Листайте дальше",
+    statementKicker: "ЧАЙ С ЧУВСТВОМ МЕСТА",
+    statement: <>Не для того, чтобы заполнить полку.<br/>А чтобы <em>остаться с вами.</em></>,
+    statementBody: "От первого пурпурного цветка до последнего янтарного глотка — Fedorov Tea хранит один пейзаж и один неторопливый ритуал.",
+    limited: "Ограниченный сезонный выпуск",
+    signatureKicker: "ГЛАВНЫЙ ЧАЙ · 01",
+    signatureTitle: "Иван-чай",
+    signatureBody: "Чистый ферментированный лист кипрея. Мягкий, округлый и тонко-цветочный, с теплом сухофруктов и лугового мёда.",
+    signatureFacts: ["50 г · листовой", "Без кофеина от природы", "Собран вручную"],
+    signatureCta: "Открыть классический чай",
+    interludeKicker: "РИТУАЛ",
+    interludeTitle: <>Для часа, когда<br/>мир становится <em>тише.</em></>,
+    collectionKicker: "КОЛЛЕКЦИЯ · ЧЕТЫРЕ МАЛЫЕ ПАРТИИ",
+    collectionTitle: "Одно поле. Четыре характера.",
+    collectionBody: "Сначала — чистый лист. Затем луговые травы, вечерние цветы и лесные ягоды. В каждой смеси кипрей остаётся главным.",
+    view: "Смотреть чай",
+    originKicker: "ЛИСТ КИПРЕЯ · CHAMAENERION ANGUSTIFOLIUM",
+    originTitle: <>Дикий по природе.<br/><em>Точный в работе.</em></>,
+    originBody: "Собран вдали от дорог, скручен, ферментирован и высушен малыми партиями. Без кофеина. Без ароматизаторов. Ничего громче самого листа.",
+    originCta: "Узнать о ремесле",
+    closingKicker: "ИЗ МАРИЙ ЭЛ — С ТЕРПЕНИЕМ",
+    closingTitle: "Ограниченный сбор для ежедневного ритуала.",
+    closingCta: "Выбрать чай",
+  },
 };
 
-export function OriginChapters({ locale }: { locale: Locale }) {
-  return <section className="origin-chapters">
-    <div className="field-note"><span>{locale === "ru" ? "ОБ ИСТОЧНИКЕ" : "A NOTE ON ORIGIN"}</span><p>{locale === "ru" ? "Не вся тишина одинакова. У нашей — запах кипрея, тёплой травы и леса после дождя." : "Not all quiet is the same. Ours smells of fireweed, warm grass and forest after rain."}</p></div>
-    {chapters[locale].map((chapter, index) => <article className={`origin-chapter origin-chapter--${index + 1}`} key={chapter.n}>
-      <div className="origin-chapter__image"><Image src={chapter.image} alt="" fill sizes="(max-width: 800px) 100vw, 60vw" /></div>
-      <div className="origin-chapter__copy"><span>{chapter.n}</span><h2>{chapter.title}</h2><p>{chapter.text}</p><Link href={localizedHref(locale, chapter.href)}>{locale === "ru" ? "Читать историю" : "Read the story"} ↗</Link></div>
-    </article>)}
-  </section>;
-}
+export function HomeLanding({ locale }: { locale: Locale }) {
+  const t = copy[locale];
+  const signature = productText(products[0], locale);
 
-export function TeaCollection({ locale }: { locale: Locale }) {
-  return <section className="tea-collection" id="teas">
-    <header><span>03</span><p>{locale === "ru" ? "ЧЕТЫРЕ ЧАЯ" : "THE FOUR TEAS"}</p><h2>{locale === "ru" ? "Листья, цветы, ягоды. Ничего лишнего." : "Leaves, flowers, berries. Nothing unnecessary."}</h2></header>
-    <div className="editorial-products">{products.map((product) => { const copy = productText(product, locale); return <article className="editorial-product" key={product.slug} style={{ "--product-bg": product.accent } as React.CSSProperties}>
-      <Link className="editorial-product__visual" href={localizedHref(locale, `/products/${product.slug}`)}><ProductVisual product={product} locale={locale}/></Link>
-      <div className="editorial-product__copy"><span>{product.initials} / 04</span><p>{copy.type}</p><h3>{copy.name}</h3><small>{copy.imagery}</small><p className="editorial-product__lede">{copy.subtitle}</p><div><strong>{money(product.price, locale)}</strong><Link href={localizedHref(locale, `/products/${product.slug}`)}>{locale === "ru" ? "Смотреть чай" : "View tea"} →</Link></div></div>
-    </article>; })}</div>
-  </section>;
-}
+  return <main className="fedorov-home">
+    <section className="home-hero">
+      <Image
+        src="/images/fedorov/hero-field.png"
+        alt={locale === "ru" ? "Ручной сбор цветущего кипрея в Марий Эл" : "Fireweed gathered by hand in Mari El"}
+        fill
+        preload
+        sizes="100vw"
+      />
+      <div className="home-hero__shade" />
+      <div className="home-hero__copy">
+        <p className="home-kicker">{t.heroKicker}</p>
+        <h1 className="text-balance">{t.heroTitle}</h1>
+        <div className="home-hero__foot">
+          <p className="text-pretty">{t.heroBody}</p>
+          <Link className="home-link home-link--light" href="#signature">{t.heroCta}<span aria-hidden="true">↘</span></Link>
+        </div>
+      </div>
+      <p className="home-hero__caption">{t.heroCaption}</p>
+      <p className="home-hero__scroll">{t.scroll}<span aria-hidden="true">↓</span></p>
+    </section>
 
-export function MariElClosing({ locale }: { locale: Locale }) {
-  return <section className="mari-closing"><div className="mari-closing__image"><Image src="/images/fedorov/organic-campaign.jpg" alt={locale === "ru" ? "Работа с листом кипрея" : "Working with freshly gathered fireweed"} fill sizes="100vw" /></div><div className="mari-closing__copy"><span>04 · MARI EL</span><h2>{locale === "ru" ? "Чашка места, где тихо." : "A cup of somewhere quiet."}</h2><p>{locale === "ru" ? "Республика лесов, речных лугов и светлых полян. Здесь мы собираем кипрей и готовим чай небольшими партиями." : "A republic of forests, river meadows and bright clearings. This is where we gather fireweed and make tea in small batches."}</p><Link href={localizedHref(locale, "/about")}>{locale === "ru" ? "Увидеть Марий Эл" : "See Mari El"} →</Link></div></section>;
+    <section className="home-statement home-reveal">
+      <p className="home-kicker">{t.statementKicker}</p>
+      <div>
+        <h2 className="text-balance">{t.statement}</h2>
+        <div className="home-statement__note">
+          <p className="text-pretty">{t.statementBody}</p>
+          <span>{t.limited}</span>
+        </div>
+      </div>
+    </section>
+
+    <section className="home-signature" id="signature">
+      <Link className="home-signature__image" href={localizedHref(locale, `/products/${products[0].slug}`)} aria-label={t.signatureCta}>
+        <Image src="/images/fedorov/product-still-life.png" alt={locale === "ru" ? "Упаковка Fedorov Tea рядом с чашкой янтарного иван-чая" : "Fedorov Tea packaging beside a cup of amber Ivan tea"} fill sizes="(max-width: 900px) 100vw, 58vw" />
+        <span>{locale === "ru" ? "КЛАССИЧЕСКИЙ · МАРИЙ ЭЛ" : "ORIGINAL · MARI EL"}</span>
+      </Link>
+      <div className="home-signature__copy home-reveal">
+        <p className="home-kicker">{t.signatureKicker}</p>
+        <h2 className="text-balance">{t.signatureTitle}</h2>
+        <p className="home-signature__body text-pretty">{t.signatureBody}</p>
+        <ul>{t.signatureFacts.map((fact, index) => <li key={fact}><span>0{index + 1}</span>{fact}</li>)}</ul>
+        <div className="home-signature__buy">
+          <strong>{money(signature.price, locale)}</strong>
+          <Link className="home-link" href={localizedHref(locale, `/products/${products[0].slug}`)}>{t.signatureCta}<span aria-hidden="true">↗</span></Link>
+        </div>
+      </div>
+    </section>
+
+    <section className="home-interlude">
+      <p className="home-kicker">{t.interludeKicker}</p>
+      <h2 className="home-reveal text-balance">{t.interludeTitle}</h2>
+      <p aria-hidden="true">56.6° N · 47.9° E</p>
+    </section>
+
+    <section className="home-collection" id="teas">
+      <header className="home-reveal">
+        <p className="home-kicker">{t.collectionKicker}</p>
+        <div>
+          <h2 className="text-balance">{t.collectionTitle}</h2>
+          <p className="text-pretty">{t.collectionBody}</p>
+        </div>
+      </header>
+      <div className="home-collection__list">
+        {products.map((product) => {
+          const item = productText(product, locale);
+          return <Link className="home-tea-row" href={localizedHref(locale, `/products/${product.slug}`)} key={product.slug}>
+            <span>{product.initials}</span>
+            <div><h3>{item.name}</h3><p>{item.type}</p></div>
+            <p>{item.subtitle}</p>
+            <strong>{money(product.price, locale)}</strong>
+            <span className="home-tea-row__action">{t.view}<b aria-hidden="true">↗</b></span>
+          </Link>;
+        })}
+      </div>
+    </section>
+
+    <section className="home-origin">
+      <div className="home-origin__copy home-reveal">
+        <p className="home-kicker">{t.originKicker}</p>
+        <h2 className="text-balance">{t.originTitle}</h2>
+        <p className="text-pretty">{t.originBody}</p>
+        <Link className="home-link" href={localizedHref(locale, "/craft")}>{t.originCta}<span aria-hidden="true">↗</span></Link>
+      </div>
+      <div className="home-origin__image">
+        <Image src="/images/fedorov/ivanTea.png" alt={locale === "ru" ? "Скрученный и высушенный лист кипрея" : "Rolled and dried fireweed leaves"} fill sizes="(max-width: 900px) 100vw, 42vw" />
+        <span>{locale === "ru" ? "ФЕРМЕНТИРОВАННЫЙ ЛИСТ" : "FERMENTED FIREWEED LEAF"}</span>
+      </div>
+    </section>
+
+    <section className="home-closing home-reveal">
+      <p className="home-kicker">{t.closingKicker}</p>
+      <h2 className="text-balance">{t.closingTitle}</h2>
+      <Link className="home-link" href={localizedHref(locale, "/shop")}>{t.closingCta}<span aria-hidden="true">→</span></Link>
+    </section>
+  </main>;
 }

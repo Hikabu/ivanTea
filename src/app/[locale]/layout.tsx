@@ -11,11 +11,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const locale = await resolveLocale(params);
   return locale === "ru"
     ? {
-        title: { default: "Иван-чай — собран в Марий Эл", template: "%s | Иван-чай" },
+        title: { default: "Fedorov Tea — иван-чай из Марий Эл", template: "%s | Fedorov Tea" },
         description: "Иван-чай ручного сбора из тихих полей Республики Марий Эл.",
       }
     : {
-        title: { default: "Ivan-tea — gathered in Mari El", template: "%s | Ivan-tea" },
+        title: { default: "Fedorov Tea — wild Ivan tea from Mari El", template: "%s | Fedorov Tea" },
         description: "Hand-gathered fireweed tea from the quiet fields of the Republic of Mari El."
       };
 }
