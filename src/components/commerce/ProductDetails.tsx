@@ -1,21 +1,8 @@
-"use client";
+import Image from "next/image";
+import { Product, productText } from "@/data/products";
+import { Locale } from "@/lib/i18n";
 
-import { Product } from "@/data/products";
-import { useState } from "react";
-import { Accordion } from "../ui/Accordion";
-
-const tabs = ["WHAT'S INSIDE", "DETAILS", "HOW TO BREW", "INGREDIENTS", "REVIEWS"];
-export function ProductDetails({ product }: { product: Product }) {
-  const [active, setActive] = useState(tabs[0]);
-  return <section className="product-details container">
-    <div className="detail-tabs" role="tablist">{tabs.map((tab) => <button role="tab" aria-selected={active === tab} onClick={() => setActive(tab)} key={tab}>{tab}</button>)}</div>
-    <div className="detail-tab-content">
-      {active === "WHAT'S INSIDE" && <div className="inside-content"><div><p className="eyebrow">A CUP WITH CHARACTER</p><h2>{product.subtitle}</h2><p>{product.ingredients} Each ingredient is cut and blended to release at the same pace, producing a cup with a clear beginning, middle and finish.</p></div><div className="ingredient-orbit"><span>{product.imagery.split(" · ")[0]}</span><b>{product.initials}</b><span>{product.imagery.split(" · ")[1]}</span></div></div>}
-      {active === "DETAILS" && <dl className="detail-specs"><div><dt>Tea Type</dt><dd>{product.type}</dd></div><div><dt>Caffeine</dt><dd>{product.caffeine}</dd></div><div><dt>Calories</dt><dd>0 per cup</dd></div><div><dt>Origin</dt><dd>{product.origin}</dd></div><div><dt>Certification</dt><dd>{product.certification}</dd></div><div><dt>Storage</dt><dd>Keep cool and dry</dd></div></dl>}
-      {active === "HOW TO BREW" && <div className="brew-steps">{[{ n: "01", t: "HEAT", d: product.type === "Green Tea" ? "175°F / 80°C" : "205°F / 96°C" }, { n: "02", t: "MEASURE", d: "1 sachet or 1 tsp" }, { n: "03", t: "STEEP", d: "3–5 minutes" }, { n: "04", t: "SERVE", d: "6–8 fl oz" }].map((step) => <div key={step.n}><span>{step.n}</span><div className={`brew-icon brew-icon--${step.n}`}/><b>{step.t}</b><p>{step.d}</p></div>)}</div>}
-      {active === "INGREDIENTS" && <div className="text-detail"><p className="eyebrow">INGREDIENTS</p><h2>Nothing to hide.</h2><p>{product.ingredients}</p><small>Blended and packed in a facility that also handles tree nuts.</small></div>}
-      {active === "REVIEWS" && <div className="reviews-panel" id="reviews"><strong>{product.rating}</strong><div><span>★★★★★</span><h2>Nearly perfect, cup after cup.</h2><p>Based on {product.reviews} verified customer reviews.</p></div></div>}
-    </div>
-    <div className="mobile-product-accordions">{tabs.slice(0, 4).map((tab) => <Accordion title={tab} key={tab}><p>{tab === "INGREDIENTS" ? product.ingredients : tab === "HOW TO BREW" ? "Heat fresh filtered water, steep for 3–5 minutes, then serve as you like it." : `${product.subtitle} ${product.ingredients}`}</p></Accordion>)}</div>
-  </section>;
+export function ProductDetails({ product, locale = "en" }: { product: Product; locale?: Locale }) {
+  const copy = productText(product, locale); const ingredients = copy.imagery.split(" · ");
+  return <section className="product-story"><article className="where-it-grows"><div><span>01 · {locale === "ru" ? "ГДЕ РАСТЁТ" : "WHERE IT GROWS"}</span><h2>{locale === "ru" ? "Светлые поля у кромки леса." : "Bright fields at the forest edge."}</h2><p>{locale === "ru" ? "Кипрей для этого чая собран вдали от больших дорог и городов. Поле выбирают не по карте, а по многолетнему знанию местности." : "The fireweed in this tea is gathered far from major roads and cities. Fields are chosen through long familiarity with the land, not a pin on a map."}</p></div><div><Image src="/images/fedorov/mari-el-landscape.png" alt="" fill sizes="(max-width: 800px) 100vw, 55vw"/></div></article><article className="inside-grid"><header><span>02 · {locale === "ru" ? "ЧТО ВНУТРИ" : "WHAT'S INSIDE"}</span><h2>{locale === "ru" ? "Каждому растению — место." : "A place for every plant."}</h2></header><div>{ingredients.map((ingredient, i) => <section key={ingredient}><span>0{i + 1}</span><i/><h3>{ingredient}</h3><small>{i === 0 ? (locale === "ru" ? "основа" : "the leaf") : (locale === "ru" ? "ботаническая нота" : "botanical note")}</small></section>)}</div></article><article className="making"><div className="making__image"><Image src="/images/fedorov/processing-sequence.png" alt="" fill sizes="(max-width: 800px) 100vw, 55vw"/></div><div><span>03 · {locale === "ru" ? "КАК МЫ ДЕЛАЕМ" : "HOW WE MAKE IT"}</span><h2>{locale === "ru" ? "Собрано медленно. Высушено бережно." : "Picked slowly. Dried carefully."}</h2><p>{locale === "ru" ? "Лист перебирают, подвяливают, скручивают, ферментируют и сушат небольшими партиями. Цветы, травы и ягоды готовят отдельно, чтобы сохранить их характер." : "Leaves are sorted, withered, rolled, fermented and dried in small batches. Flowers, herbs and berries are prepared separately so each keeps its character."}</p></div></article><article className="brew-guide"><span>04 · {locale === "ru" ? "КАК ЗАВАРИВАТЬ" : "HOW TO BREW"}</span><h2>{locale === "ru" ? "Даже чайнику некуда спешить." : "Even the kettle needn’t hurry."}</h2><div><p><b>2–3 g</b><small>{locale === "ru" ? "на 250 мл" : "per 250 ml"}</small></p><p><b>90–95°C</b><small>{locale === "ru" ? "температура воды" : "water"}</small></p><p><b>6–8 min</b><small>{locale === "ru" ? "первый настой" : "first steep"}</small></p></div></article></section>;
 }

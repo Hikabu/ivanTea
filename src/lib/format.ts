@@ -1,1 +1,3 @@
-export const money = (value: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+import { Locale } from "./i18n";
+
+export const money = (value: number, locale: Locale = "en") => new Intl.NumberFormat(locale === "ru" ? "ru-RU" : "en-US", { style: "currency", currency: "USD" }).format(value);

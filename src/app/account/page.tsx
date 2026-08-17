@@ -1,5 +1,0 @@
-import Link from "next/link";
-
-export default function AccountPage() {
-  return <main className="account-page"><section><p className="eyebrow">WELCOME BACK</p><h1>Your tea table</h1><p>Sign in to view orders, manage subscriptions, and see your Hearth Circle leaves.</p><form><label>Email address<input type="email" required autoComplete="email"/></label><label>Password<input type="password" required autoComplete="current-password"/></label><div><label className="remember"><input type="checkbox"/> Remember me</label><a href="#">Forgot password?</a></div><button className="button button--primary" type="submit">SIGN IN</button></form><p className="account-register">New to Alder &amp; Hearth? <Link href="#">Create an account</Link></p></section><aside><p className="eyebrow">THE HEARTH CIRCLE</p><h2>Every cup counts.</h2><p>Members earn leaves with every order, receive early tastes of limited blends, and get a birthday tin on us.</p><ul><li>1 leaf for every $1 spent</li><li>Members-only tastings</li><li>Early access to seasonal blends</li></ul><Link href="#">Explore member benefits →</Link></aside></main>;
-}

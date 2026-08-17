@@ -1,12 +1,12 @@
 {
-  "name": "alder-and-hearth",
+  "name": "fedorov-tea",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "tsc --noEmit --incremental false --noUnusedLocals --noUnusedParameters"
   },
   "dependencies": {
     "next": "16.3.0",

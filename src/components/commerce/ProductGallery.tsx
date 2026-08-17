@@ -1,17 +1,8 @@
-"use client";
-
+import Image from "next/image";
 import { Product } from "@/data/products";
-import { useState } from "react";
-import { Modal } from "../ui/Modal";
+import { Locale } from "@/lib/i18n";
 import { ProductVisual } from "./ProductVisual";
 
-const views = ["FRONT", "INGREDIENTS", "BREWED", "DETAIL"];
-export function ProductGallery({ product }: { product: Product }) {
-  const [active, setActive] = useState(0);
-  const [zoom, setZoom] = useState(false);
-  return <div className="gallery-wrap">
-    <div className={`product-gallery-main view-${active}`} onClick={() => setZoom(true)}><ProductVisual product={product} scene={active > 0}/><button className="zoom-button">＋ ZOOM</button></div>
-    <div className="gallery-thumbs">{views.map((view, index) => <button className={active === index ? "is-active" : ""} onClick={() => setActive(index)} key={view}><ProductVisual product={product}/><span>{view}</span></button>)}</div>
-    <Modal open={zoom} onClose={() => setZoom(false)} title={`${product.name} detail`}><div className="zoomed-product"><ProductVisual product={product} scene/></div></Modal>
-  </div>;
+export function ProductGallery({ product, locale = "en" }: { product: Product; locale?: Locale }) {
+  return <div className="pdp-gallery" style={{ "--product-bg": product.accent } as React.CSSProperties}><ProductVisual product={product} locale={locale}/><span>{locale === "ru" ? "50 г · листовой чай" : "50 g · loose leaf"}</span><div className="pdp-gallery__detail"><Image src="/images/fedorov/product-still-life.png" alt="" fill sizes="(max-width: 800px) 45vw, 20vw"/></div></div>;
 }

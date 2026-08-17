@@ -1,58 +1,54 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { articles, collections, testimonials } from "@/data/content";
-import { products } from "@/data/products";
-import { useState } from "react";
-import { Button } from "../ui/Button";
-import { Icon } from "../ui/Icon";
-import { ProductGrid } from "../commerce/ProductGrid";
+import { products, productText } from "@/data/products";
+import { Locale, localizedHref } from "@/lib/i18n";
+import { money } from "@/lib/format";
+import { ProductVisual } from "@/components/commerce/ProductVisual";
 
-export function Hero() {
-  return <section className="hero">
-    <Image src="/images/alder-hearth-hero.png" alt="Alder and Hearth tea tin, ceramic cup and fresh botanicals in warm morning light" fill priority sizes="100vw"/>
-    <div className="hero-overlay"/>
-    <div className="container hero-copy"><p className="eyebrow">THE ORCHARD COLLECTION · SUMMER 2026</p><h1>Let the morning<br/><em>unfold slowly.</em></h1><span>Bright stone fruit, fragrant leaves and warming ginger—blended for unrushed cups and open windows.</span><div><Button href="/collections/black-tea">Shop the Collection</Button><Button href="/blog/a-practical-guide-to-brewing" variant="text">Read the story <Icon name="arrow" size={17}/></Button></div></div>
+export function Hero({ locale }: { locale: Locale }) {
+  return <section className="quiet-hero">
+    <Image src="/images/fedorov/hero-field.png" alt={locale === "ru" ? "Ручной сбор кипрея в поле Марий Эл" : "Fireweed gathered by hand in a Mari El field"} fill priority sizes="100vw" />
+    <div className="quiet-hero__veil" />
+    <div className="quiet-hero__copy">
+      <p>{locale === "ru" ? "ИВАН-ЧАЙ · МАРИЙ ЭЛ" : "IVAN-TEA · MARI EL"}</p>
+      <h1>{locale === "ru" ? "Там, где заканчивается дорога." : "Where the road ends."}</h1>
+      <Link href="#teas">{locale === "ru" ? "Открыть чаи" : "Discover the teas"} <span>↓</span></Link>
+    </div>
+    <small>{locale === "ru" ? "56.6° с.ш. · 47.9° в.д." : "56.6° N · 47.9° E"}</small>
   </section>;
 }
 
-export function TrustStrip() {
-  const items = [{ mark: "320+", label: "Distinctive blends" }, { mark: "◇", label: "Responsibly sourced" }, { mark: "1994", label: "Crafted since" }, { mark: "✦", label: "Whole botanicals" }];
-  return <section className="trust-strip"><div className="container">{items.map((item) => <div key={item.label}><b>{item.mark}</b><span>{item.label}</span></div>)}</div></section>;
-}
+const chapters = {
+  en: [
+    { n: "01", title: "The Field", text: "Far from highways and cities, fireweed grows where meadow gives way to forest.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
+    { n: "02", title: "The Harvest", text: "Healthy leaves are gathered by hand, one small batch and one familiar field at a time.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
+  ],
+  ru: [
+    { n: "01", title: "Поле", text: "Вдали от трасс и городов кипрей растёт там, где луг встречается с лесом.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
+    { n: "02", title: "Сбор", text: "Здоровые листья собирают вручную — маленькими партиями, на знакомых полях.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
+  ],
+};
 
-export function ProductDiscovery() {
-  const [tab, setTab] = useState<"best" | "new">("best");
-  const shown = tab === "best" ? products.slice(0, 4) : [products[3], products[4], products[5], products[6]];
-  return <section className="section product-discovery container">
-    <div className="section-head tab-head"><div><p className="eyebrow">FROM THE TEA ROOM</p><div className="tabs" role="tablist"><button role="tab" aria-selected={tab === "best"} onClick={() => setTab("best")}>BEST SELLERS</button><button role="tab" aria-selected={tab === "new"} onClick={() => setTab("new")}>NEW ARRIVALS</button></div></div><Link href="/shop">View all teas <Icon name="arrow" size={17}/></Link></div>
-    <ProductGrid products={shown}/>
+export function OriginChapters({ locale }: { locale: Locale }) {
+  return <section className="origin-chapters">
+    <div className="field-note"><span>{locale === "ru" ? "ОБ ИСТОЧНИКЕ" : "A NOTE ON ORIGIN"}</span><p>{locale === "ru" ? "Не вся тишина одинакова. У нашей — запах кипрея, тёплой травы и леса после дождя." : "Not all quiet is the same. Ours smells of fireweed, warm grass and forest after rain."}</p></div>
+    {chapters[locale].map((chapter, index) => <article className={`origin-chapter origin-chapter--${index + 1}`} key={chapter.n}>
+      <div className="origin-chapter__image"><Image src={chapter.image} alt="" fill sizes="(max-width: 800px) 100vw, 60vw" /></div>
+      <div className="origin-chapter__copy"><span>{chapter.n}</span><h2>{chapter.title}</h2><p>{chapter.text}</p><Link href={localizedHref(locale, chapter.href)}>{locale === "ru" ? "Читать историю" : "Read the story"} ↗</Link></div>
+    </article>)}
   </section>;
 }
 
-export function CategorySection() {
-  return <section className="section category-section container"><div className="section-head"><div><p className="eyebrow">FIND YOUR CUP</p><h2>Shop by category</h2><span>Begin with the leaf, the hour, or simply what sounds good.</span></div></div><div className="category-grid">{collections.map((collection) => <Link className="category-tile" href={`/collections/${collection.slug}`} key={collection.slug}><Image src={collection.image} alt={`${collection.name} served in an editorial tea setting`} fill sizes="(max-width: 700px) 50vw, 25vw"/><div/><span><small>{collection.description}</small><b>{collection.name}</b><u>Explore <Icon name="arrow" size={16}/></u></span></Link>)}</div></section>;
+export function TeaCollection({ locale }: { locale: Locale }) {
+  return <section className="tea-collection" id="teas">
+    <header><span>03</span><p>{locale === "ru" ? "ЧЕТЫРЕ ЧАЯ" : "THE FOUR TEAS"}</p><h2>{locale === "ru" ? "Листья, цветы, ягоды. Ничего лишнего." : "Leaves, flowers, berries. Nothing unnecessary."}</h2></header>
+    <div className="editorial-products">{products.map((product) => { const copy = productText(product, locale); return <article className="editorial-product" key={product.slug} style={{ "--product-bg": product.accent } as React.CSSProperties}>
+      <Link className="editorial-product__visual" href={localizedHref(locale, `/products/${product.slug}`)}><ProductVisual product={product} locale={locale}/></Link>
+      <div className="editorial-product__copy"><span>{product.initials} / 04</span><p>{copy.type}</p><h3>{copy.name}</h3><small>{copy.imagery}</small><p className="editorial-product__lede">{copy.subtitle}</p><div><strong>{money(product.price, locale)}</strong><Link href={localizedHref(locale, `/products/${product.slug}`)}>{locale === "ru" ? "Смотреть чай" : "View tea"} →</Link></div></div>
+    </article>; })}</div>
+  </section>;
 }
 
-export function FeatureCampaign() {
-  return <section className="campaign-section"><div className="campaign-image"><Image src="/images/organic-campaign.jpg" alt="Loose green tea and botanical leaves in a ceramic bowl" fill sizes="60vw"/></div><div className="campaign-copy"><p className="eyebrow">THE GARDEN, PRESERVED</p><h2>Nothing added.<br/>Nothing hurried.</h2><p>Our certified organic collection begins with whole botanicals, careful harvests and growers we know by name. The result is a cup with clarity—of flavor and of origin.</p><dl><div><dt>32</dt><dd>certified organic blends</dd></div><div><dt>11</dt><dd>growing regions</dd></div></dl><Button href="/shop?certification=organic" variant="outline">Explore organic tea</Button></div></section>;
-}
-
-export function TestimonialSection() {
-  const [active, setActive] = useState(0);
-  const testimonial = testimonials[active];
-  return <section className="section testimonials"><div className="container"><p className="eyebrow">NOTES FROM THE TEA TABLE</p><h2>What our customers say</h2><div className="quote-mark">“</div><blockquote>{testimonial.quote}</blockquote><p className="quote-author">{testimonial.name} <span>on {testimonial.product}</span></p><div className="testimonial-controls"><button aria-label="Previous testimonial" onClick={() => setActive((active - 1 + testimonials.length) % testimonials.length)}>←</button><span>{String(active + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}</span><button aria-label="Next testimonial" onClick={() => setActive((active + 1) % testimonials.length)}>→</button></div></div></section>;
-}
-
-export function JournalSection() {
-  return <section className="section journal-section container"><div className="section-head"><div><p className="eyebrow">THE FIELD NOTES</p><h2>Learn the leaf</h2><span>Practical knowledge and small stories for a more considered cup.</span></div><Link href="/blog">Visit the journal <Icon name="arrow" size={17}/></Link></div><div className="article-grid">{articles.map((article) => <article className="article-card" key={article.slug}><Link href={`/blog/${article.slug}`} className="article-image"><Image src={article.image} alt={article.title} fill sizes="(max-width: 700px) 100vw, 25vw"/></Link><p>{article.category}</p><h3><Link href={`/blog/${article.slug}`}>{article.title}</Link></h3><span>{article.excerpt}</span><Link className="text-link" href={`/blog/${article.slug}`}>Read story <Icon name="arrow" size={15}/></Link></article>)}</div></section>;
-}
-
-export function MembershipSection() {
-  return <section className="membership-section container"><div><p className="eyebrow">SUBSCRIPTIONS</p><h3>A well-stocked tea shelf.</h3><p>Save 10% on the teas you reach for most. Pause, skip or cancel at any time.</p><Link href="/shop">Learn more <Icon name="arrow" size={16}/></Link></div><div><p className="eyebrow">THE HEARTH CIRCLE</p><h3>Good tea returns the favor.</h3><p>Earn leaves with every order and redeem them on future cups, gifts and tastings.</p><Link href="/account">Join rewards <Icon name="arrow" size={16}/></Link></div></section>;
-}
-
-export function PressSection() {
-  return <section className="press-section container"><p>FEATURED IN</p><div><span>BON APPÉTIT</span><span>goop</span><span>FOOD &amp; WINE</span><span>Kinfolk</span><span>MARTHA STEWART</span></div></section>;
+export function MariElClosing({ locale }: { locale: Locale }) {
+  return <section className="mari-closing"><div className="mari-closing__image"><Image src="/images/fedorov/organic-campaign.jpg" alt={locale === "ru" ? "Работа с листом кипрея" : "Working with freshly gathered fireweed"} fill sizes="100vw" /></div><div className="mari-closing__copy"><span>04 · MARI EL</span><h2>{locale === "ru" ? "Чашка места, где тихо." : "A cup of somewhere quiet."}</h2><p>{locale === "ru" ? "Республика лесов, речных лугов и светлых полян. Здесь мы собираем кипрей и готовим чай небольшими партиями." : "A republic of forests, river meadows and bright clearings. This is where we gather fireweed and make tea in small batches."}</p><Link href={localizedHref(locale, "/about")}>{locale === "ru" ? "Увидеть Марий Эл" : "See Mari El"} →</Link></div></section>;
 }

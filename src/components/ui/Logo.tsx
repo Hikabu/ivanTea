@@ -1,10 +1,6 @@
 import Link from "next/link";
+import { Locale, localizedHref } from "@/lib/i18n";
 
-export function Logo({ light = false }: { light?: boolean }) {
-  return (
-    <Link className={`logo ${light ? "logo--light" : ""}`} href="/" aria-label="Alder and Hearth home">
-      <span className="logo-mark" aria-hidden="true"><i/><i/><i/></span>
-      <span><b>ALDER <em>&amp;</em> HEARTH</b><small>BOTANICAL TEA MERCHANTS</small></span>
-    </Link>
-  );
+export function Logo({ locale = "en" }: { locale?: Locale }) {
+  return <Link className="quiet-logo" href={localizedHref(locale, "/")} aria-label="Ivan-tea home"><b>IVAN</b><i>—</i><b>TEA</b><small>MARI EL</small></Link>;
 }

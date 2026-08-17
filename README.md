@@ -1,6 +1,6 @@
-# Alder & Hearth
+# Fedorov Tea
 
-A complete, data-driven premium tea storefront built with Next.js 16, React 19, and TypeScript.
+A bilingual premium Ivan Tea storefront built with Next.js 16, React 19, and TypeScript. The product story centers on hand collection in the Mari El Republic, with retail, gifting, and wholesale paths.
 
 ## Run locally
 
@@ -9,20 +9,21 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). The site redirects to English at `/en`; Russian is available at `/ru`.
 
 ## Routes
 
-- `/` — editorial commerce homepage
-- `/shop` — filterable and sortable catalog
-- `/collections/[slug]` — category commerce with educational content
-- `/products/[slug]` — gallery, variants, subscription, and add-to-cart
-- `/search` — cross-merchandise search
-- `/blog` and `/blog/[slug]` — educational journal
-- `/about`, `/gifts`, `/account`, `/cart`
+- `/en` and `/ru` — localized editorial commerce homepages
+- `/[locale]/shop` — filterable and sortable Ivan Tea catalog
+- `/[locale]/collections/[slug]` — localized collections
+- `/[locale]/products/[slug]` — product details and purchasing
+- `/[locale]/blog` and `/[locale]/blog/[slug]` — evidence-minded articles and recipes
+- `/[locale]/gifts` — premium Mari El gift set
+- `/[locale]/wholesale` — B2B, distribution, bulk, and corporate gifting
+- `/[locale]/search`, `/about`, `/account`, `/cart`, and `/legal`
 
-The local mock catalog, navigation, collections, journal, and testimonials live in `src/data`. Cart state persists in local storage.
+The local catalog, navigation, articles, recipes, and testimonials live in `src/data`. Cart state persists in local storage.
 
-## Original campaign asset
+## Original Fedorov imagery
 
-`public/images/alder-hearth-hero.png` was created with the built-in image generation tool for this project. Final prompt summary: an original Alder & Hearth forest-green tea tin, handmade cream cup, stone fruit, bergamot, jasmine, loose tea, natural linen, and warm morning light in a wide editorial still life; product weighted right with negative space left; no resemblance to existing tea branding, no watermark, and no stock-photo or CGI styling.
+The seven images in `public/images/fedorov` were created with the built-in image generation tool specifically for this project. They cover Mari El fireweed fields, hand collection, processing and drying, the compact product canister, a cold Ivan Tea recipe, the regional landscape, and an original fitted gift set.

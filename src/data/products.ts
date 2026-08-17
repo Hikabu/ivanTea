@@ -1,105 +1,74 @@
+import { Locale } from "@/lib/i18n";
+
+export type ProductVariant = { id: string; label: string; labelRu: string; detail: string; detailRu: string; price: number };
 export type Product = {
-  slug: string;
-  name: string;
-  subtitle: string;
-  type: string;
-  flavor: string;
-  benefit: string;
-  caffeine: string;
-  format: string;
-  certification: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  badge?: "BESTSELLER" | "NEW" | "LIMITED" | "ORGANIC";
-  color: string;
-  accent: string;
-  initials: string;
-  imagery: string;
-  ingredients: string;
-  origin: string;
-  variants: { id: string; label: string; detail: string; price: number }[];
+  slug: string; name: string; nameRu: string; subtitle: string; subtitleRu: string;
+  type: string; typeRu: string; flavor: string; flavorRu: string; benefit: string; benefitRu: string;
+  caffeine: string; caffeineRu: string; format: string; formatRu: string; certification: string; certificationRu: string;
+  price: number; rating: number; reviews: number;
+  color: string; accent: string; initials: string; image: string; imagery: string; imageryRu: string;
+  ingredients: string; ingredientsRu: string; origin: string; originRu: string; variants: ProductVariant[];
+};
+
+const formats = (price: number): ProductVariant[] => [
+  { id: "box", label: "BOX", labelRu: "КОРОБКА", detail: "50 g · loose leaf", detailRu: "50 г · листовой", price },
+  { id: "refill", label: "REFILL", labelRu: "РЕФИЛ", detail: "100 g · paper pouch", detailRu: "100 г · бумажный пакет", price: Math.round(price * 1.72) },
+];
+
+const common = {
+  caffeine: "Naturally caffeine-free", caffeineRu: "Без кофеина от природы",
+  format: "Loose leaf", formatRu: "Листовой",
+  certification: "Gathered by hand", certificationRu: "Собран вручную",
+  origin: "Republic of Mari El", originRu: "Республика Марий Эл",
 };
 
 export const products: Product[] = [
   {
-    slug: "orchard-ginger-black-tea",
-    name: "Orchard Ginger",
-    subtitle: "Lush white peach and a bright ginger finish.",
-    type: "Black Tea", flavor: "Fruit", benefit: "Energy", caffeine: "Moderate", format: "Tea Bags", certification: "Rainforest Grown",
-    price: 14, rating: 4.9, reviews: 842, badge: "BESTSELLER", color: "#23472f", accent: "#e2aa72", initials: "OG",
-    imagery: "peach · ginger · assam",
-    ingredients: "Assam black tea, dried peach, ginger root and natural peach essence.", origin: "India · Sri Lanka",
-    variants: [
-      { id: "tin", label: "TIN", detail: "40 pyramid sachets", price: 14 },
-      { id: "refill", label: "REFILL", detail: "40 pyramid sachets", price: 12.5 },
-      { id: "bulk", label: "BULK", detail: "200 sachets", price: 54 },
-      { id: "traveler", label: "TRAVELER", detail: "8 sachets", price: 7 },
-    ],
+    ...common, slug: "pure-ivan-tea", name: "Ivan-tea", nameRu: "Иван-чай", initials: "01", price: 18,
+    subtitle: "The field in its clearest form: soft, amber and quietly floral.", subtitleRu: "Поле в чистом виде: мягкий янтарный настой с тонким цветочным ароматом.",
+    type: "Original", typeRu: "Классический", flavor: "Pure", flavorRu: "Чистый", benefit: "Everyday", benefitRu: "На каждый день",
+    ingredients: "Fermented fireweed leaf.", ingredientsRu: "Ферментированный лист кипрея.",
+    imagery: "fireweed leaf · fireweed flower", imageryRu: "лист кипрея · цветок кипрея",
+    color: "#d9829a", accent: "#f0d1d8", image: "/images/fedorov/ivanTea.png", rating: 4.9, reviews: 214, variants: formats(18),
   },
   {
-    slug: "bergamot-noir",
-    name: "Bergamot Noir",
-    subtitle: "A stately Earl Grey with fragrant citrus peel.",
-    type: "Black Tea", flavor: "Earl Grey", benefit: "Energy", caffeine: "Moderate", format: "Loose Leaf", certification: "Responsibly Sourced",
-    price: 15, rating: 4.8, reviews: 516, badge: "BESTSELLER", color: "#263832", accent: "#d7ba79", initials: "BN",
-    imagery: "bergamot · cornflower · ceylon", ingredients: "Ceylon black tea, bergamot oil, blue cornflower.", origin: "Sri Lanka",
-    variants: [{ id: "tin", label: "TIN", detail: "3.5 oz · 45 cups", price: 15 }, { id: "refill", label: "REFILL", detail: "3.5 oz · 45 cups", price: 13.5 }, { id: "bulk", label: "BULK", detail: "1 lb · 200 cups", price: 49 }],
+    ...common, slug: "meadow", name: "Meadow", nameRu: "Луг", initials: "02", price: 20,
+    subtitle: "Light and aromatic, with the cool edge of a meadow after rain.", subtitleRu: "Лёгкий ароматный сбор с прохладой луга после дождя.",
+    type: "Botanical blend", typeRu: "Ботанический сбор", flavor: "Herbal", flavorRu: "Травяной", benefit: "Fresh", benefitRu: "Свежий",
+    ingredients: "Fireweed, mint, chamomile and lavender.", ingredientsRu: "Кипрей, мята, ромашка и лаванда.",
+    imagery: "mint · chamomile · lavender", imageryRu: "мята · ромашка · лаванда",
+    color: "#a9ad87", accent: "#e5e1c8", image: "/images/fedorov/ivanChamamel.png", rating: 4.8, reviews: 96, variants: formats(20),
   },
   {
-    slug: "meadow-mint-tisane",
-    name: "Meadow Mint",
-    subtitle: "Garden mint, lemon verbena and a cool finish.",
-    type: "Herbal", flavor: "Mint", benefit: "Digestion", caffeine: "None", format: "Tea Bags", certification: "Organic",
-    price: 13, rating: 4.9, reviews: 289, badge: "ORGANIC", color: "#66816a", accent: "#c9d2ac", initials: "MM",
-    imagery: "peppermint · verbena · fennel", ingredients: "Organic peppermint, spearmint, lemon verbena and fennel.", origin: "Pacific Northwest",
-    variants: [{ id: "tin", label: "TIN", detail: "36 tea bags", price: 13 }, { id: "refill", label: "REFILL", detail: "36 tea bags", price: 11.5 }, { id: "bulk", label: "BULK", detail: "180 tea bags", price: 46 }],
+    ...common, slug: "evening", name: "Evening", nameRu: "Вечер", initials: "03", price: 20,
+    subtitle: "A soft cup for the hour when the light leaves the field.", subtitleRu: "Мягкий настой для часа, когда свет уходит с поля.",
+    type: "Botanical blend", typeRu: "Ботанический сбор", flavor: "Floral", flavorRu: "Цветочный", benefit: "Quiet", benefitRu: "Спокойный",
+    ingredients: "Fireweed, lemon balm, chamomile and lavender.", ingredientsRu: "Кипрей, мелисса, ромашка и лаванда.",
+    imagery: "lemon balm · chamomile · lavender", imageryRu: "мелисса · ромашка · лаванда",
+    color: "#b7a77f", accent: "#e8dec2", image: "/images/fedorov/ivanLavander.png", rating: 4.9, reviews: 118, variants: formats(20),
   },
   {
-    slug: "golden-chamomile",
-    name: "Golden Chamomile",
-    subtitle: "Whole blossoms softened with honeyed linden.",
-    type: "Herbal", flavor: "Floral", benefit: "Sleep", caffeine: "None", format: "Loose Leaf", certification: "Organic",
-    price: 16, rating: 4.7, reviews: 194, badge: "NEW", color: "#ad713d", accent: "#eed997", initials: "GC",
-    imagery: "chamomile · linden · vanilla", ingredients: "Organic Egyptian chamomile, linden flower and vanilla bean.", origin: "Egypt",
-    variants: [{ id: "tin", label: "TIN", detail: "2.5 oz · 35 cups", price: 16 }, { id: "refill", label: "REFILL", detail: "2.5 oz · 35 cups", price: 14 }, { id: "traveler", label: "TRAVELER", detail: "8 sachets", price: 7 }],
-  },
-  {
-    slug: "ceremonial-matcha",
-    name: "Ceremonial Matcha",
-    subtitle: "Shade-grown, stone-ground and quietly sweet.",
-    type: "Matcha", flavor: "Green", benefit: "Focus", caffeine: "High", format: "Powder", certification: "Organic",
-    price: 28, rating: 4.8, reviews: 161, badge: "ORGANIC", color: "#6c783e", accent: "#c4cd75", initials: "CM",
-    imagery: "tencha · spring harvest · uji", ingredients: "100% organic stone-ground Japanese tencha.", origin: "Uji · Japan",
-    variants: [{ id: "tin", label: "TIN", detail: "1.4 oz · 20 bowls", price: 28 }, { id: "refill", label: "REFILL", detail: "1.4 oz · 20 bowls", price: 25 }],
-  },
-  {
-    slug: "smoked-plum-oolong",
-    name: "Smoked Plum Oolong",
-    subtitle: "Roasted oolong, dark plum and cedar smoke.",
-    type: "Oolong", flavor: "Fruit", benefit: "Focus", caffeine: "Low", format: "Loose Leaf", certification: "Small Batch",
-    price: 19, rating: 4.6, reviews: 98, badge: "LIMITED", color: "#6d3f45", accent: "#cb8b82", initials: "SP",
-    imagery: "plum · cedar · wuyi oolong", ingredients: "Wuyi oolong, dried plum, cedar-smoked black tea.", origin: "Fujian · China",
-    variants: [{ id: "tin", label: "TIN", detail: "3 oz · 40 cups", price: 19 }, { id: "refill", label: "REFILL", detail: "3 oz · 40 cups", price: 17 }],
-  },
-  {
-    slug: "jasmine-cloud-green",
-    name: "Jasmine Cloud",
-    subtitle: "Spring green tea scented over jasmine blossoms.",
-    type: "Green Tea", flavor: "Floral", benefit: "Focus", caffeine: "Low", format: "Tea Bags", certification: "Organic",
-    price: 15, rating: 4.9, reviews: 337, badge: "BESTSELLER", color: "#587155", accent: "#f0e4b8", initials: "JC",
-    imagery: "jasmine · mao feng · spring air", ingredients: "Organic green tea scented with fresh jasmine blossoms.", origin: "Guangxi · China",
-    variants: [{ id: "tin", label: "TIN", detail: "36 tea bags", price: 15 }, { id: "refill", label: "REFILL", detail: "36 tea bags", price: 13.5 }, { id: "bulk", label: "BULK", detail: "180 tea bags", price: 52 }],
-  },
-  {
-    slug: "spiced-hearth-chai",
-    name: "Spiced Hearth Chai",
-    subtitle: "Assam tea, toasted cardamom and true cinnamon.",
-    type: "Chai", flavor: "Cinnamon", benefit: "Energy", caffeine: "Moderate", format: "Tea Bags", certification: "Responsibly Sourced",
-    price: 14, rating: 4.8, reviews: 476, badge: "BESTSELLER", color: "#874b36", accent: "#d2a167", initials: "SH",
-    imagery: "cardamom · cinnamon · assam", ingredients: "Assam black tea, cardamom, cinnamon, ginger, clove and black pepper.", origin: "India",
-    variants: [{ id: "tin", label: "TIN", detail: "40 tea bags", price: 14 }, { id: "refill", label: "REFILL", detail: "40 tea bags", price: 12.5 }, { id: "bulk", label: "BULK", detail: "200 tea bags", price: 52 }],
+    ...common, slug: "forest-berries", name: "Forest Berries", nameRu: "Лесные ягоды", initials: "04", price: 22,
+    subtitle: "Deeper, brighter and tart at the edges; the forest after the meadow.", subtitleRu: "Глубокий, яркий, с тонкой кислинкой — лес после луга.",
+    type: "Berry blend", typeRu: "Ягодный сбор", flavor: "Berry", flavorRu: "Ягодный", benefit: "Rich", benefitRu: "Насыщенный",
+    ingredients: "Fireweed, rose hips, sea buckthorn, cranberry and raspberry.", ingredientsRu: "Кипрей, шиповник, облепиха, клюква и малина.",
+    imagery: "rose hip · sea buckthorn · cranberry · raspberry", imageryRu: "шиповник · облепиха · клюква · малина",
+    color: "#80354e", accent: "#dbc0c8", image: "/images/fedorov/apples.png", rating: 4.8, reviews: 129, variants: formats(22),
   },
 ];
 
+export const giftProduct: Product = { ...products[0], slug: "mari-el-gift-set", name: "The Four Fields", nameRu: "Четыре поля", initials: "04", price: 68, subtitle: "All four teas, gathered into one quiet gift.", subtitleRu: "Все четыре чая в одном спокойном подарке.", ingredients: "Four 50 g boxes: Original, Meadow, Evening and Forest Berries.", ingredientsRu: "Четыре коробки по 50 г: Классический, Луг, Вечер и Лесные ягоды.", variants: [{ id: "gift", label: "GIFT SET", labelRu: "НАБОР", detail: "4 × 50 g", detailRu: "4 × 50 г", price: 68 }] };
+
 export const getProduct = (slug: string) => products.find((product) => product.slug === slug) ?? products[0];
+export const productText = (product: Product, locale: Locale) => ({
+  ...product,
+  name: locale === "ru" ? product.nameRu : product.name,
+  subtitle: locale === "ru" ? product.subtitleRu : product.subtitle,
+  type: locale === "ru" ? product.typeRu : product.type,
+  flavor: locale === "ru" ? product.flavorRu : product.flavor,
+  caffeine: locale === "ru" ? product.caffeineRu : product.caffeine,
+  imagery: locale === "ru" ? product.imageryRu : product.imagery,
+  ingredients: locale === "ru" ? product.ingredientsRu : product.ingredients,
+  origin: locale === "ru" ? product.originRu : product.origin,
+  variants: product.variants.map((variant) => ({ ...variant, label: locale === "ru" ? variant.labelRu : variant.label, detail: locale === "ru" ? variant.detailRu : variant.detail })),
+});
