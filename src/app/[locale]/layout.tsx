@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import "../garof.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StoreProvider } from "@/components/layout/StoreProvider";
@@ -12,12 +11,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const locale = await resolveLocale(params);
   return locale === "ru"
     ? {
-        title: { default: "GAROF | Чай из сердца Марий Эл", template: "%s | GAROF" },
-        description: "Премиальный чай GAROF, вдохновлённый природой, ботаническими традициями и культурным наследием Марий Эл.",
+        title: { default: "Иван-чай — собран в Марий Эл", template: "%s | Иван-чай" },
+        description: "Иван-чай ручного сбора из тихих полей Республики Марий Эл.",
       }
     : {
-        title: { default: "GAROF | Tea From The Heart Of Mari El", template: "%s | GAROF" },
-        description: "GAROF is a premium tea brand inspired by the nature, botanical traditions and cultural heritage of Mari El."
+        title: { default: "Ivan-tea — gathered in Mari El", template: "%s | Ivan-tea" },
+        description: "Hand-gathered fireweed tea from the quiet fields of the Republic of Mari El."
       };
 }
 

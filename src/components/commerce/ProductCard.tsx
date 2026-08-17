@@ -1,29 +1,11 @@
 "use client";
-
 import Link from "next/link";
 import { Product, productText } from "@/data/products";
 import { money } from "@/lib/format";
-import { Locale, localizedHref, ui } from "@/lib/i18n";
+import { Locale, localizedHref } from "@/lib/i18n";
 import { ProductVisual } from "./ProductVisual";
-import { useStore } from "../layout/StoreProvider";
-import { Icon } from "../ui/Icon";
 
 export function ProductCard({ product, locale = "en" }: { product: Product; locale?: Locale }) {
-  const { addToCart } = useStore();
   const copy = productText(product, locale);
-  const labels = ui[locale];
-  return <article className="product-card">
-    <div className="product-card-image">
-      {copy.badge && <span className="badge">{copy.badge}</span>}
-      <button className="wishlist" aria-label={locale === "ru" ? `Добавить ${copy.name} в избранное` : `Add ${copy.name} to wishlist`}><Icon name="heart" size={18}/></button>
-      <Link href={localizedHref(locale, `/products/${product.slug}`)}><ProductVisual product={product} locale={locale}/></Link>
-      <button className="quick-add" onClick={() => addToCart(product)}>{labels.quickAdd} <span>{money(product.price, locale)}</span></button>
-    </div>
-    <div className="product-card-copy">
-      <Link href={localizedHref(locale, `/products/${product.slug}`)}><h3>{copy.name}</h3></Link>
-      <p>{copy.type} · {copy.imagery.split(" · ").slice(0, 2).join(" + ")}</p>
-      <div className="rating" aria-label={`${product.rating} out of 5 stars, ${product.reviews} reviews`}><span>★★★★★</span><small>{product.rating} ({product.reviews})</small></div>
-      <strong>{labels.from} {money(product.price, locale)}</strong>
-    </div>
-  </article>;
+  return <article className="product-card"><Link className="product-card__visual" href={localizedHref(locale, `/products/${product.slug}`)} style={{ "--product-bg": product.accent } as React.CSSProperties}><span>{product.initials}</span><ProductVisual product={product} locale={locale}/></Link><div className="product-card__copy"><span>{copy.type}</span><Link href={localizedHref(locale, `/products/${product.slug}`)}><h3>{copy.name}</h3></Link><p>{copy.ingredients}</p><div><strong>{money(product.price, locale)}</strong><Link href={localizedHref(locale, `/products/${product.slug}`)}>{locale === "ru" ? "Смотреть" : "View"} →</Link></div></div></article>;
 }

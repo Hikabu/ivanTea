@@ -1,8 +1,8 @@
-import { CollectionBrowser } from "@/components/commerce/CollectionBrowser";
+import { ProductGrid } from "@/components/commerce/ProductGrid";
+import { products } from "@/data/products";
 import { resolveLocale } from "@/lib/i18n-server";
-import { Suspense } from "react";
 
 export default async function ShopPage({ params }: { params: Promise<{ locale: string }> }) {
   const locale = await resolveLocale(params);
-  return <main><section className="collection-hero shop-hero"><p className="breadcrumbs">{locale === "ru" ? "Главная / Магазин" : "Home / Shop"}</p><h1>{locale === "ru" ? "Весь иван-чай" : "All Ivan Tea"}</h1><p>{locale === "ru" ? "Чистый ферментированный кипрей и сочетания с яблоком, ягодами, цветками и травами — всё собрано вручную в Марий Эл." : "Pure fermented fireweed and combinations with apple, berries, blossoms and herbs—all hand collected in Mari El."}</p><div className="collection-values"><span><b>✦</b>{locale === "ru" ? "Ручной сбор" : "Hand collected"}</span><span><b>0</b>{locale === "ru" ? "Кофеина" : "Caffeine"}</span><span><b>∞</b>{locale === "ru" ? "Доставка по миру" : "Worldwide delivery"}</span></div></section><div className="container"><Suspense fallback={<div className="collection-loading">{locale === "ru" ? "Готовим коллекцию…" : "Preparing the collection…"}</div>}><CollectionBrowser locale={locale}/></Suspense></div></main>;
+  return <main className="shop-page"><header className="shop-intro"><span>01 — 04</span><h1>{locale === "ru" ? "Четыре поля. Четыре чая." : "Four fields. Four teas."}</h1><p>{locale === "ru" ? "Ферментированный кипрей и растения, которые растут рядом. Собрано вручную в Марий Эл." : "Fermented fireweed and the plants that grow beside it. Gathered by hand in Mari El."}</p></header><section className="shop-list"><ProductGrid products={products} locale={locale}/></section><aside className="shop-note"><span>{locale === "ru" ? "КАК ВЫБРАТЬ" : "CHOOSING A TEA"}</span><p>{locale === "ru" ? "Начните с классического. Луг — самый свежий, Вечер — самый мягкий, Лесные ягоды — самый насыщенный." : "Begin with Original. Meadow is the freshest, Evening the softest, Forest Berries the richest."}</p></aside></main>;
 }

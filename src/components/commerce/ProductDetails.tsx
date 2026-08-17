@@ -1,29 +1,8 @@
-"use client";
-
+import Image from "next/image";
 import { Product, productText } from "@/data/products";
 import { Locale } from "@/lib/i18n";
-import { useState } from "react";
-import { Accordion } from "../ui/Accordion";
 
 export function ProductDetails({ product, locale = "en" }: { product: Product; locale?: Locale }) {
-  const copy = productText(product, locale);
-  const tabs = locale === "ru" ? ["ЧТО ВНУТРИ", "ИНФОРМАЦИЯ", "КАК ЗАВАРИВАТЬ", "СОСТАВ", "ОТЗЫВЫ"] : ["WHAT'S INSIDE", "DETAILS", "HOW TO BREW", "INGREDIENTS", "REVIEWS"];
-  const [active, setActive] = useState(tabs[0]);
-  const is = (en: string, ru: string) => active === (locale === "ru" ? ru : en);
-  const steps = locale === "ru" ? [
-    { n: "01", t: "ВОДА", d: "90–95°C" }, { n: "02", t: "ПОРЦИЯ", d: "2–3 г / 250 мл" }, { n: "03", t: "ВРЕМЯ", d: "6–8 минут" }, { n: "04", t: "ПОДАЧА", d: "Горячим или со льдом" },
-  ] : [
-    { n: "01", t: "HEAT", d: "90–95°C" }, { n: "02", t: "MEASURE", d: "2–3 g / 250 ml" }, { n: "03", t: "STEEP", d: "6–8 minutes" }, { n: "04", t: "SERVE", d: "Hot or over ice" },
-  ];
-  return <section className="product-details container">
-    <div className="detail-tabs" role="tablist">{tabs.map((tab) => <button role="tab" aria-selected={active === tab} onClick={() => setActive(tab)} key={tab}>{tab}</button>)}</div>
-    <div className="detail-tab-content">
-      {is("WHAT'S INSIDE", "ЧТО ВНУТРИ") && <div className="inside-content"><div><p className="eyebrow">{locale === "ru" ? "ВКУС С ХАРАКТЕРОМ" : "A CUP WITH CHARACTER"}</p><h2>{copy.subtitle}</h2><p>{copy.ingredients} {locale === "ru" ? "Крупная нарезка помогает компонентам раскрываться одновременно, сохраняя вкус самого кипрея." : "A generous cut helps every ingredient open at the same pace while keeping the fireweed leaf at the center."}</p></div><div className="ingredient-orbit"><span>{copy.imagery.split(" · ")[0]}</span><b>{product.initials}</b><span>{copy.imagery.split(" · ")[1]}</span></div></div>}
-      {is("DETAILS", "ИНФОРМАЦИЯ") && <dl className="detail-specs"><div><dt>{locale === "ru" ? "Тип" : "Tea type"}</dt><dd>{copy.type}</dd></div><div><dt>{locale === "ru" ? "Кофеин" : "Caffeine"}</dt><dd>{copy.caffeine}</dd></div><div><dt>{locale === "ru" ? "Масса нетто" : "Net weight"}</dt><dd>50 g</dd></div><div><dt>{locale === "ru" ? "Происхождение" : "Origin"}</dt><dd>{copy.origin}</dd></div><div><dt>{locale === "ru" ? "Срок годности" : "Shelf life"}</dt><dd>{copy.shelfLife}</dd></div><div><dt>{locale === "ru" ? "Хранение" : "Storage"}</dt><dd>{copy.storage}</dd></div></dl>}
-      {is("HOW TO BREW", "КАК ЗАВАРИВАТЬ") && <div className="brew-steps">{steps.map((step) => <div key={step.n}><span>{step.n}</span><div className={`brew-icon brew-icon--${step.n}`}/><b>{step.t}</b><p>{step.d}</p></div>)}</div>}
-      {is("INGREDIENTS", "СОСТАВ") && <div className="text-detail"><p className="eyebrow">{locale === "ru" ? "ПОЛНЫЙ СОСТАВ" : "FULL INGREDIENTS"}</p><h2>{locale === "ru" ? "Ничего лишнего." : "Nothing to hide."}</h2><p>{copy.ingredients}</p><small>{locale === "ru" ? "Информация о партии, дате упаковки и сроке годности указывается на нижней этикетке." : "Batch, packing date and best-before information appear on the base label."}</small></div>}
-      {is("REVIEWS", "ОТЗЫВЫ") && <div className="reviews-panel" id="reviews"><strong>{product.rating}</strong><div><span>★★★★★</span><h2>{locale === "ru" ? "Чашка за чашкой." : "Cup after cup."}</h2><p>{locale === "ru" ? `На основе ${product.reviews} подтверждённых отзывов.` : `Based on ${product.reviews} verified customer reviews.`}</p></div></div>}
-    </div>
-    <div className="mobile-product-accordions">{tabs.slice(0, 4).map((tab) => <Accordion title={tab} key={tab}><p>{tab === tabs[3] ? copy.ingredients : tab === tabs[2] ? (locale === "ru" ? "2–3 г на 250 мл, вода 90–95°C, 6–8 минут." : "Use 2–3 g per 250 ml, water at 90–95°C, and steep for 6–8 minutes.") : `${copy.subtitle} ${copy.ingredients}`}</p></Accordion>)}</div>
-  </section>;
+  const copy = productText(product, locale); const ingredients = copy.imagery.split(" · ");
+  return <section className="product-story"><article className="where-it-grows"><div><span>01 · {locale === "ru" ? "ГДЕ РАСТЁТ" : "WHERE IT GROWS"}</span><h2>{locale === "ru" ? "Светлые поля у кромки леса." : "Bright fields at the forest edge."}</h2><p>{locale === "ru" ? "Кипрей для этого чая собран вдали от больших дорог и городов. Поле выбирают не по карте, а по многолетнему знанию местности." : "The fireweed in this tea is gathered far from major roads and cities. Fields are chosen through long familiarity with the land, not a pin on a map."}</p></div><div><Image src="/images/fedorov/mari-el-landscape.png" alt="" fill sizes="(max-width: 800px) 100vw, 55vw"/></div></article><article className="inside-grid"><header><span>02 · {locale === "ru" ? "ЧТО ВНУТРИ" : "WHAT'S INSIDE"}</span><h2>{locale === "ru" ? "Каждому растению — место." : "A place for every plant."}</h2></header><div>{ingredients.map((ingredient, i) => <section key={ingredient}><span>0{i + 1}</span><i/><h3>{ingredient}</h3><small>{i === 0 ? (locale === "ru" ? "основа" : "the leaf") : (locale === "ru" ? "ботаническая нота" : "botanical note")}</small></section>)}</div></article><article className="making"><div className="making__image"><Image src="/images/fedorov/processing-sequence.png" alt="" fill sizes="(max-width: 800px) 100vw, 55vw"/></div><div><span>03 · {locale === "ru" ? "КАК МЫ ДЕЛАЕМ" : "HOW WE MAKE IT"}</span><h2>{locale === "ru" ? "Собрано медленно. Высушено бережно." : "Picked slowly. Dried carefully."}</h2><p>{locale === "ru" ? "Лист перебирают, подвяливают, скручивают, ферментируют и сушат небольшими партиями. Цветы, травы и ягоды готовят отдельно, чтобы сохранить их характер." : "Leaves are sorted, withered, rolled, fermented and dried in small batches. Flowers, herbs and berries are prepared separately so each keeps its character."}</p></div></article><article className="brew-guide"><span>04 · {locale === "ru" ? "КАК ЗАВАРИВАТЬ" : "HOW TO BREW"}</span><h2>{locale === "ru" ? "Даже чайнику некуда спешить." : "Even the kettle needn’t hurry."}</h2><div><p><b>2–3 g</b><small>{locale === "ru" ? "на 250 мл" : "per 250 ml"}</small></p><p><b>90–95°C</b><small>{locale === "ru" ? "температура воды" : "water"}</small></p><p><b>6–8 min</b><small>{locale === "ru" ? "первый настой" : "first steep"}</small></p></div></article></section>;
 }
