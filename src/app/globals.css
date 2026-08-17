@@ -4,6 +4,111 @@
   *,*::before,*::after{box-sizing:border-box} html{scroll-behavior:smooth} body,h1,h2,h3,p,dl,dd,blockquote{margin:0} button,input,select{font:inherit} a{color:inherit;text-decoration:none} img{object-fit:cover} button{color:inherit;cursor:pointer} ul{padding:0;list-style:none}
 }
 
+/* Fedorov horizontal catalogue: restrained product scale and torn-paper landscape fragments. */
+@layer catalogue-overrides {
+  .tea-scene__object,
+  .tea-scene--2 .tea-scene__object,
+  .tea-scene--3 .tea-scene__object,
+  .tea-scene--4 .tea-scene__object {
+    bottom: 11%;
+    left: 2vw;
+    width: 49vw;
+    height: 69%;
+    overflow: visible;
+  }
+
+  .tea-scene--2 .tea-scene__object { left: 0; }
+  .tea-scene--3 .tea-scene__object { left: 3vw; }
+  .tea-scene--4 .tea-scene__object { left: 1vw; }
+
+  .tea-scene__object img {
+    object-fit: contain;
+    object-position: center bottom;
+    transform: none;
+  }
+
+  .tea-ground {
+    height: 118px;
+  }
+
+  .tea-ground span {
+    overflow: hidden;
+  }
+
+  .tea-ground span:nth-child(1) {
+    z-index: 1;
+    left: 3%;
+    width: 94%;
+    height: 106px;
+    background-color: var(--ground-one);
+    background-image: var(--ground-photo);
+    background-position: var(--ground-photo-position);
+    background-size: cover;
+    clip-path: polygon(0 28%, 2% 19%, 5% 22%, 8% 13%, 12% 18%, 17% 9%, 22% 15%, 27% 10%, 32% 19%, 38% 12%, 44% 20%, 50% 13%, 56% 17%, 62% 10%, 68% 18%, 74% 12%, 80% 19%, 86% 11%, 91% 17%, 96% 10%, 100% 22%, 100% 100%, 0 100%);
+  }
+
+  .tea-ground span:nth-child(2) {
+    z-index: 2;
+    left: -2%;
+    width: 58%;
+    height: 38px;
+    background: var(--ground-two);
+    clip-path: polygon(0 24%, 5% 17%, 10% 23%, 16% 13%, 23% 20%, 30% 10%, 38% 18%, 46% 12%, 55% 22%, 63% 14%, 72% 21%, 81% 11%, 90% 19%, 100% 13%, 100% 100%, 0 100%);
+  }
+
+  .tea-ground span:nth-child(3) {
+    z-index: 3;
+    right: -2%;
+    width: 57%;
+    height: 43px;
+    background: var(--ground-three);
+    clip-path: polygon(0 22%, 7% 13%, 14% 19%, 22% 9%, 30% 17%, 38% 11%, 47% 20%, 56% 12%, 65% 18%, 74% 9%, 83% 17%, 91% 11%, 100% 20%, 100% 100%, 0 100%);
+  }
+
+  .tea-ground span:nth-child(4) {
+    z-index: 4;
+    right: 29%;
+    width: 31%;
+    height: 27px;
+    background: var(--ground-one);
+    clip-path: polygon(0 27%, 12% 15%, 23% 22%, 35% 10%, 47% 19%, 59% 12%, 72% 23%, 85% 11%, 100% 18%, 100% 100%, 0 100%);
+  }
+}
+
+@layer catalogue-overrides {
+  @media (max-width: 900px) {
+    .tea-scene__object,
+    .tea-scene--2 .tea-scene__object,
+    .tea-scene--3 .tea-scene__object,
+    .tea-scene--4 .tea-scene__object {
+      top: 72px;
+      right: 0;
+      bottom: auto;
+      left: 0;
+      width: 100vw;
+      height: 286px;
+    }
+
+    .tea-scene__object img {
+      object-position: center;
+      transform: none;
+    }
+
+    .tea-scene__copy {
+      top: 362px;
+    }
+
+    .tea-ground {
+      height: 82px;
+    }
+
+    .tea-ground span:nth-child(1) { height: 75px; }
+    .tea-ground span:nth-child(2) { height: 29px; }
+    .tea-ground span:nth-child(3) { height: 33px; }
+    .tea-ground span:nth-child(4) { height: 21px; }
+  }
+}
+
 @layer base {
   :root{--paper:#f7f4ed;--milk:#fbfaf6;--ink:#292824;--muted:#6f6b63;--line:rgba(41,40,36,.18);--pink:#d9829a;--berry:#80354e;--grass:#a9ad87;--straw:#b7a77f;--serif:"Iowan Old Style","Baskerville","Times New Roman",serif;--sans:Inter,"Helvetica Neue",Arial,sans-serif}
   html{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px} body{min-width:320px;background:var(--paper)} main{overflow:hidden} h1,h2,h3{font-family:var(--serif);font-weight:400} p{line-height:1.6} ::selection{background:#e8c3ce}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.text-balance{text-wrap:balance}.text-pretty{text-wrap:pretty}.container{width:min(100% - 64px,1440px);margin-inline:auto}.eyebrow,.breadcrumbs{font:500 10px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase}.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:0 24px;border:1px solid var(--ink);background:transparent;font-size:11px;letter-spacing:.08em;text-transform:uppercase}.button--primary{color:var(--paper);background:var(--ink)}

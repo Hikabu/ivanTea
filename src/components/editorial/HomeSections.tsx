@@ -48,18 +48,20 @@ const copy = {
 };
 
 const grounds = [
-  ["#27372c", "#bd617e", "#d8c49b", "#756c4c"],
-  ["#4d5239", "#c8a83f", "#98a27a", "#756d92"],
-  ["#232d29", "#756e82", "#bda56f", "#847b65"],
-  ["#29382e", "#7b3049", "#b64e3f", "#d07a3e"],
+  { colors: ["#27372c", "#bd617e", "#d8c49b"], image: "/images/fedorov/village.png", position: "50% 68%" },
+  { colors: ["#4d5239", "#c8a83f", "#756d92"], image: "/images/fedorov/field.png", position: "50% 67%" },
+  { colors: ["#232d29", "#98a27a", "#756e82"], image: "/images/fedorov/goat.png", position: "70% 67%" },
+  { colors: ["#29382e", "#bda56f", "#847b65"], image: "/images/fedorov/treevillag.png", position: "50% 66%" },
+  { colors: ["#29382e", "#7b3049", "#d07a3e"], image: "/images/fedorov/sun.png", position: "50% 27%" },
 ] as const;
 
-function Ground({ colors }: { colors: readonly [string, string, string, string] }) {
+function Ground({ colors, image, position }: { colors: readonly [string, string, string]; image: string; position: string }) {
   const style = {
     "--ground-one": colors[0],
     "--ground-two": colors[1],
     "--ground-three": colors[2],
-    "--ground-four": colors[3],
+    "--ground-photo": `url(${image})`,
+    "--ground-photo-position": position,
   } as CSSProperties;
 
   return <div className="tea-ground" style={style} aria-hidden="true">
@@ -79,12 +81,10 @@ function SceneControl({ previous, next, labels }: { previous?: string; next: str
 
 export function HomeLanding({ locale }: { locale: Locale }) {
   const t = copy[locale];
-  const introGround = [grounds[0][0], grounds[1][1], grounds[2][2], grounds[3][1]] as const;
 
   return <main className="fedorov-home">
     <HorizontalCatalog label={t.catalogLabel}>
       <section className="tea-intro" id="tea-intro">
-        <div className="tea-scene__arc" aria-hidden="true" />
         <div className="tea-intro__copy">
           <p>{t.introKicker}</p>
           <h1 className="text-balance">{t.introTitle}</h1>
@@ -100,7 +100,7 @@ export function HomeLanding({ locale }: { locale: Locale }) {
         </div>
         <p className="tea-scene__scroll">{t.scroll}<span aria-hidden="true">→</span></p>
         <SceneControl next="#tea-pure-ivan-tea" labels={t} />
-        <Ground colors={introGround} />
+        <Ground {...grounds[0]} />
       </section>
 
       {products.map((product, index) => {
@@ -118,7 +118,6 @@ export function HomeLanding({ locale }: { locale: Locale }) {
           key={product.slug}
           style={sceneStyle}
         >
-          <div className="tea-scene__arc" aria-hidden="true" />
           <Link
             className="tea-scene__object"
             href={localizedHref(locale, `/products/${product.slug}`)}
@@ -163,7 +162,7 @@ export function HomeLanding({ locale }: { locale: Locale }) {
             ><span /></Link>)}
           </nav>
           <SceneControl previous={previous} next={next} labels={t} />
-          <Ground colors={grounds[index]} />
+          <Ground {...grounds[index + 1]} />
         </article>;
       })}
     </HorizontalCatalog>
