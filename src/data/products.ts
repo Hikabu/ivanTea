@@ -29,7 +29,7 @@ export const products: Product[] = [
     type: "Original", typeRu: "Классический", flavor: "Pure", flavorRu: "Чистый", benefit: "Everyday", benefitRu: "На каждый день",
     ingredients: "Fermented fireweed leaf.", ingredientsRu: "Ферментированный лист кипрея.",
     imagery: "fireweed leaf · fireweed flower", imageryRu: "лист кипрея · цветок кипрея",
-    color: "#d9829a", accent: "#f0d1d8", image: "/images/fedorov/ivanTea.png", rating: 4.9, reviews: 214, variants: formats(18),
+    color: "#d9829a", accent: "#f0d1d8", image: "/images/fedorov/ivanTea-transparent.png", rating: 4.9, reviews: 214, variants: formats(18),
   },
   {
     ...common, slug: "meadow", name: "Meadow", nameRu: "Луг", initials: "02", price: 20,
@@ -37,7 +37,7 @@ export const products: Product[] = [
     type: "Botanical blend", typeRu: "Ботанический сбор", flavor: "Herbal", flavorRu: "Травяной", benefit: "Fresh", benefitRu: "Свежий",
     ingredients: "Fireweed, mint, chamomile and lavender.", ingredientsRu: "Кипрей, мята, ромашка и лаванда.",
     imagery: "mint · chamomile · lavender", imageryRu: "мята · ромашка · лаванда",
-    color: "#a9ad87", accent: "#e5e1c8", image: "/images/fedorov/ivanChamamel.png", rating: 4.8, reviews: 96, variants: formats(20),
+    color: "#a9ad87", accent: "#e5e1c8", image: "/images/fedorov/ivanChamamel-transparent.png", rating: 4.8, reviews: 96, variants: formats(20),
   },
   {
     ...common, slug: "evening", name: "Evening", nameRu: "Вечер", initials: "03", price: 20,

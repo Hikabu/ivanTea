@@ -1,54 +1,182 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { products, productText } from "@/data/products";
-import { Locale, localizedHref } from "@/lib/i18n";
 import { money } from "@/lib/format";
-import { ProductVisual } from "@/components/commerce/ProductVisual";
+import { Locale, localizedHref } from "@/lib/i18n";
+import { HorizontalCatalog } from "./HorizontalCatalog";
 
-export function Hero({ locale }: { locale: Locale }) {
-  return <section className="quiet-hero">
-    <Image src="/images/fedorov/hero-field.png" alt={locale === "ru" ? "Ручной сбор кипрея в поле Марий Эл" : "Fireweed gathered by hand in a Mari El field"} fill priority sizes="100vw" />
-    <div className="quiet-hero__veil" />
-    <div className="quiet-hero__copy">
-      <p>{locale === "ru" ? "ИВАН-ЧАЙ · МАРИЙ ЭЛ" : "IVAN-TEA · MARI EL"}</p>
-      <h1>{locale === "ru" ? "Там, где заканчивается дорога." : "Where the road ends."}</h1>
-      <Link href="#teas">{locale === "ru" ? "Открыть чаи" : "Discover the teas"} <span>↓</span></Link>
-    </div>
-    <small>{locale === "ru" ? "56.6° с.ш. · 47.9° в.д." : "56.6° N · 47.9° E"}</small>
-  </section>;
-}
-
-const chapters = {
-  en: [
-    { n: "01", title: "The Field", text: "Far from highways and cities, fireweed grows where meadow gives way to forest.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
-    { n: "02", title: "The Harvest", text: "Healthy leaves are gathered by hand, one small batch and one familiar field at a time.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
-  ],
-  ru: [
-    { n: "01", title: "Поле", text: "Вдали от трасс и городов кипрей растёт там, где луг встречается с лесом.", image: "/images/fedorov/mari-el-landscape.png", href: "/about" },
-    { n: "02", title: "Сбор", text: "Здоровые листья собирают вручную — маленькими партиями, на знакомых полях.", image: "/images/fedorov/drying-screens.png", href: "/craft" },
-  ],
+const copy = {
+  en: {
+    catalogLabel: "Fedorov Tea collection",
+    introKicker: "Fedorov Tea · Republic of Mari El",
+    introTitle: "Wild fireweed tea, gathered by hand.",
+    introBody: "Four small seasonal blends. Naturally caffeine-free. Made for the quiet part of the day.",
+    introBotanical: "Chamaenerion angustifolium · wild harvest",
+    introLink: "Meet the four teas",
+    collection: "Four small batches · Mari El",
+    scroll: "Scroll to explore",
+    view: "View this tea",
+    ingredients: "In the blend",
+    previous: "Previous scene",
+    next: "Next scene",
+    originLabel: "One wild leaf · one quiet place",
+    originTitle: "Made slowly, so the leaf can speak for itself.",
+    originBody: "Fireweed is gathered by hand far from roads, then rolled, fermented and dried in small seasonal runs. Each blend begins with the same soft, caffeine-free leaf.",
+    originLink: "Read about the craft",
+    shopLink: "See all four teas",
+  },
+  ru: {
+    catalogLabel: "Коллекция Fedorov Tea",
+    introKicker: "Fedorov Tea · Республика Марий Эл",
+    introTitle: "Дикий иван-чай ручного сбора.",
+    introBody: "Четыре небольшие сезонные смеси. Без кофеина от природы. Для тихой части дня.",
+    introBotanical: "Chamaenerion angustifolium · дикий сбор",
+    introLink: "Познакомиться с четырьмя чаями",
+    collection: "Четыре малые партии · Марий Эл",
+    scroll: "Листайте вправо",
+    view: "Смотреть этот чай",
+    ingredients: "Состав",
+    previous: "Предыдущая сцена",
+    next: "Следующая сцена",
+    originLabel: "Один дикий лист · одно тихое место",
+    originTitle: "Мы не торопим чай — и лист говорит сам за себя.",
+    originBody: "Кипрей собирают вручную вдали от дорог, затем скручивают, ферментируют и сушат небольшими сезонными партиями. В основе каждой смеси — тот же мягкий лист без кофеина.",
+    originLink: "Узнать о ремесле",
+    shopLink: "Посмотреть все четыре чая",
+  },
 };
 
-export function OriginChapters({ locale }: { locale: Locale }) {
-  return <section className="origin-chapters">
-    <div className="field-note"><span>{locale === "ru" ? "ОБ ИСТОЧНИКЕ" : "A NOTE ON ORIGIN"}</span><p>{locale === "ru" ? "Не вся тишина одинакова. У нашей — запах кипрея, тёплой травы и леса после дождя." : "Not all quiet is the same. Ours smells of fireweed, warm grass and forest after rain."}</p></div>
-    {chapters[locale].map((chapter, index) => <article className={`origin-chapter origin-chapter--${index + 1}`} key={chapter.n}>
-      <div className="origin-chapter__image"><Image src={chapter.image} alt="" fill sizes="(max-width: 800px) 100vw, 60vw" /></div>
-      <div className="origin-chapter__copy"><span>{chapter.n}</span><h2>{chapter.title}</h2><p>{chapter.text}</p><Link href={localizedHref(locale, chapter.href)}>{locale === "ru" ? "Читать историю" : "Read the story"} ↗</Link></div>
-    </article>)}
-  </section>;
+const grounds = [
+  { colors: ["#27372c", "#bd617e", "#d8c49b"], image: "/images/fedorov/village.png", position: "50% 68%" },
+  { colors: ["#4d5239", "#c8a83f", "#756d92"], image: "/images/fedorov/field.png", position: "50% 67%" },
+  { colors: ["#232d29", "#98a27a", "#756e82"], image: "/images/fedorov/goat.png", position: "70% 67%" },
+  { colors: ["#29382e", "#bda56f", "#847b65"], image: "/images/fedorov/treevillag.png", position: "50% 66%" },
+  { colors: ["#29382e", "#7b3049", "#d07a3e"], image: "/images/fedorov/sun.png", position: "50% 27%" },
+] as const;
+
+function Ground({ colors, image, position }: { colors: readonly [string, string, string]; image: string; position: string }) {
+  const style = {
+    "--ground-one": colors[0],
+    "--ground-two": colors[1],
+    "--ground-three": colors[2],
+    "--ground-photo": `url(${image})`,
+    "--ground-photo-position": position,
+  } as CSSProperties;
+
+  return <div className="tea-ground" style={style} aria-hidden="true">
+    <span /><span /><span /><span />
+  </div>;
 }
 
-export function TeaCollection({ locale }: { locale: Locale }) {
-  return <section className="tea-collection" id="teas">
-    <header><span>03</span><p>{locale === "ru" ? "ЧЕТЫРЕ ЧАЯ" : "THE FOUR TEAS"}</p><h2>{locale === "ru" ? "Листья, цветы, ягоды. Ничего лишнего." : "Leaves, flowers, berries. Nothing unnecessary."}</h2></header>
-    <div className="editorial-products">{products.map((product) => { const copy = productText(product, locale); return <article className="editorial-product" key={product.slug} style={{ "--product-bg": product.accent } as React.CSSProperties}>
-      <Link className="editorial-product__visual" href={localizedHref(locale, `/products/${product.slug}`)}><ProductVisual product={product} locale={locale}/></Link>
-      <div className="editorial-product__copy"><span>{product.initials} / 04</span><p>{copy.type}</p><h3>{copy.name}</h3><small>{copy.imagery}</small><p className="editorial-product__lede">{copy.subtitle}</p><div><strong>{money(product.price, locale)}</strong><Link href={localizedHref(locale, `/products/${product.slug}`)}>{locale === "ru" ? "Смотреть чай" : "View tea"} →</Link></div></div>
-    </article>; })}</div>
-  </section>;
+function SceneControl({ previous, next, labels }: { previous?: string; next: string; labels: { previous: string; next: string } }) {
+  return <nav className="tea-scene__control" aria-label={labels.next}>
+    {previous
+      ? <Link href={previous} aria-label={labels.previous}>←</Link>
+      : <span aria-hidden="true">←</span>}
+    <i aria-hidden="true" />
+    <Link href={next} aria-label={labels.next}>→</Link>
+  </nav>;
 }
 
-export function MariElClosing({ locale }: { locale: Locale }) {
-  return <section className="mari-closing"><div className="mari-closing__image"><Image src="/images/fedorov/organic-campaign.jpg" alt={locale === "ru" ? "Работа с листом кипрея" : "Working with freshly gathered fireweed"} fill sizes="100vw" /></div><div className="mari-closing__copy"><span>04 · MARI EL</span><h2>{locale === "ru" ? "Чашка места, где тихо." : "A cup of somewhere quiet."}</h2><p>{locale === "ru" ? "Республика лесов, речных лугов и светлых полян. Здесь мы собираем кипрей и готовим чай небольшими партиями." : "A republic of forests, river meadows and bright clearings. This is where we gather fireweed and make tea in small batches."}</p><Link href={localizedHref(locale, "/about")}>{locale === "ru" ? "Увидеть Марий Эл" : "See Mari El"} →</Link></div></section>;
+export function HomeLanding({ locale }: { locale: Locale }) {
+  const t = copy[locale];
+
+  return <main className="fedorov-home">
+    <HorizontalCatalog label={t.catalogLabel}>
+      <section className="tea-intro" id="tea-intro">
+        <div className="tea-intro__copy">
+          <p>{t.introKicker}</p>
+          <h1 className="text-balance">{t.introTitle}</h1>
+          <p className="text-pretty">{t.introBody}</p>
+          <Link href="#tea-pure-ivan-tea">{t.introLink}<span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="tea-intro__edition">
+          <strong className="tabular-nums">04</strong>
+          <span>{t.introBotanical}</span>
+        </div>
+        <div className="tea-intro__moods" aria-hidden="true">
+          {products.map((product) => <span key={product.slug} style={{ "--dot": product.color } as CSSProperties} />)}
+        </div>
+        <p className="tea-scene__scroll">{t.scroll}<span aria-hidden="true">→</span></p>
+        <SceneControl next="#tea-pure-ivan-tea" labels={t} />
+        <Ground {...grounds[0]} />
+      </section>
+
+      {products.map((product, index) => {
+        const item = productText(product, locale);
+        const sceneStyle = {
+          "--mood": product.color,
+          "--mood-soft": product.accent,
+        } as CSSProperties;
+        const previous = index === 0 ? "#tea-intro" : `#tea-${products[index - 1].slug}`;
+        const next = index === products.length - 1 ? "#tea-origin" : `#tea-${products[index + 1].slug}`;
+
+        return <article
+          className={`tea-scene tea-scene--${index + 1}`}
+          id={`tea-${product.slug}`}
+          key={product.slug}
+          style={sceneStyle}
+        >
+          <Link
+            className="tea-scene__object"
+            href={localizedHref(locale, `/products/${product.slug}`)}
+            aria-label={`${t.view}: ${item.name}`}
+          >
+            <Image
+              src={product.image}
+              alt={`${item.name}: ${item.ingredients}`}
+              fill
+              preload={index === 0}
+              sizes="(max-width: 900px) 100vw, 58vw"
+            />
+          </Link>
+
+          <div className="tea-scene__copy">
+            <div className="tea-scene__meta">
+              <span className="tabular-nums">0{index + 1} / 04</span>
+              <span>{t.collection}</span>
+            </div>
+            <div className="tea-mood-dot" aria-hidden="true" />
+            <p className="tea-scene__type">{item.type}</p>
+            <h2 className="text-balance">{item.name}</h2>
+            <p className="tea-scene__lede text-pretty">{item.subtitle}</p>
+            <div className="tea-scene__ingredients">
+              <span>{t.ingredients}</span>
+              <p className="text-pretty">{item.ingredients}</p>
+            </div>
+            <div className="tea-scene__buy">
+              <strong>{money(product.price, locale)}</strong>
+              <Link href={localizedHref(locale, `/products/${product.slug}`)}>{t.view}<span aria-hidden="true">↗</span></Link>
+            </div>
+          </div>
+
+          <nav className="tea-scene__dots" aria-label={locale === "ru" ? "Выбрать чай" : "Choose a tea"}>
+            {products.map((navProduct, navIndex) => <Link
+              href={`#tea-${navProduct.slug}`}
+              key={navProduct.slug}
+              className={navIndex === index ? "is-current" : ""}
+              aria-label={locale === "ru" ? navProduct.nameRu : navProduct.name}
+              aria-current={navIndex === index ? "true" : undefined}
+              style={{ "--dot": navProduct.color } as CSSProperties}
+            ><span /></Link>)}
+          </nav>
+          <SceneControl previous={previous} next={next} labels={t} />
+          <Ground {...grounds[index + 1]} />
+        </article>;
+      })}
+    </HorizontalCatalog>
+
+    <section className="tea-origin-note" id="tea-origin">
+      <p>{t.originLabel}</p>
+      <div>
+        <h2 className="text-balance">{t.originTitle}</h2>
+        <p className="text-pretty">{t.originBody}</p>
+        <div>
+          <Link href={localizedHref(locale, "/craft")}>{t.originLink}<span aria-hidden="true">↗</span></Link>
+          <Link href={localizedHref(locale, "/shop")}>{t.shopLink}<span aria-hidden="true">→</span></Link>
+        </div>
+      </div>
+    </section>
+  </main>;
 }
